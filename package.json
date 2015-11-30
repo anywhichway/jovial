@@ -1,6 +1,6 @@
 {
   "name": "jovial",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Javascript Object Validation Interception Augmentation Library",
   "main": "index.js",
   "scripts": {
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/anywhichway/jovial/issues"
   },
-  "homepage": "https://github.com/anywhichway/jovial#readme"
+  "homepage": "https://github.com/anywhichway/jovial#readme",
+  "dependencies": {
+    "chrome-proxy": ""
+  }
 }

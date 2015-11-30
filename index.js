@@ -2,7 +2,7 @@
 	"use strict";
 	var _global = this;
 	var Proxy = require('chrome-proxy');
-	function Validator(config,constructor,name) {
+	function Validator(config) {
 		var me = this;
 		if(config) {
 			var keys = Object.keys(config);
@@ -10,9 +10,6 @@
 				me[key] = config[key];
 				me[key].name = key;
 			});
-		}
-		if(constructor) {
-			me.bind(constructor,name);
 		}
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {
@@ -26,7 +23,6 @@
 						var result = Validator.validation[key](validation[key],value);
 						if(!result) {
 							error = (error ? error : new Validator.ValidationError(target));
-							var validation = {};
 							error.errors[property] = (error.errors[property] ? error.errors[property] : {});
 							error.errors[property].value = (value===undefined ? null : value);
 							error.errors[property].validation = (error.errors[property].validation ? error.errors[property].validation : {});
@@ -47,7 +43,7 @@
 			}
 		};
 		if(constructorOrObject instanceof Function) {
-			cons = Function("cons","hndlr","return function " + name + "() { cons.apply(this,arguments); return new Proxy(this,hndlr);  }")(constructorOrObject,handler);
+			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,Proxy);
 			cons.prototype = Object.create(constructorOrObject.prototype);
 			cons.prototype.__kind__ = name;
 			cons.prototype.constructor = cons;

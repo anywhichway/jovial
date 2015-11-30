@@ -1,6 +1,6 @@
 {
   "name": "jovial",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Javascript Object Validation Interception Augmentation Library",
   "main": "index.js",
   "scripts": {

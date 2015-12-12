@@ -1,3 +1,7 @@
+//     jovial
+//
+//     Copyright (c) 2015 Simon Y. Blackwell, AnyWhichWay
+//     MIT License - http://opensource.org/licenses/mit-license.php
 (function() {
 	"use strict";
 	var _global = this;
@@ -16,7 +20,7 @@
 		name = (name ? name : constructor.name);
 		var validator = this, cons;
 		var handler = {
-			set: function(target,property,value,proxy) {
+			set: function(target,property,value) { // ,proxy
 				var validation = validator[property], keys = Object.keys(validation), error;
 				keys.forEach(function(key) {
 					if(typeof(Validator.validation[key])==="function") {
@@ -116,7 +120,7 @@
 		return new RegExp(regex).test(value);
 	}
 	
-	if (typeof(module) != 'undefined' && module.exports) {
+	if (typeof(module) !== 'undefined' && module.exports) {
 		module.exports = Validator;
 	} else if (typeof define === 'function' && define.amd) {
 		// Publish as AMD module
@@ -124,7 +128,7 @@
 	} else {
 		// Publish as global (in browsers)
 		var _previousRoot = _global.Validator;
-		// **`noConflict()` - (browser only) to reset global 'uuid' var**
+		// **`noConflict()` - (browser only) to reset global 'Validator' var**
 		Validator.noConflict = function() {
 			_global.Validator = _previousRoot;
 			return Validator;

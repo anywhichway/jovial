@@ -1,6 +1,6 @@
 var Validator = require('../index.js');
 
-function TestObject() {
+var TestObject = function() {
 	this.name = "Joe";
 }
 var TestObjectValidator = new Validator({name: {type:"string"}});

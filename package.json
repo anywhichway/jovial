@@ -4,7 +4,7 @@
   "description": "Javascript Object Validation Interception Augmentation Library",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "istanbul cover node_modules/mocha/bin/_mocha"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,18 @@
     "chrome-proxy": ""
   },
   "devDependencies": {
+    "blanket": "^1.2.1",
     "chai": "^3.4.1",
+    "istanbul": "^0.4.1",
     "mocha": "^2.3.4"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "///[\\w-]+\\.js$/",
+      "data-cover-never": [
+        "node_modules",
+        "test"
+      ]
+    }
   }
 }

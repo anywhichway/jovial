@@ -17,7 +17,7 @@
 		}
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {
-		name = (name ? name : constructor.name);
+		name = (name ? name : (constructorOrObject.name ? constructorOrObject.name : "anonymous"));
 		var validator = this, cons;
 		var handler = {
 			set: function(target,property,value) { // ,proxy
@@ -114,13 +114,15 @@
 	Validator.validation.min = function(min,value) {
 		return value>=min;
 	}
+	Validator.validation.min.onError = RangeError;
 	Validator.validation.max = function(max,value) {
 		return value<=max;
 	}
+	Validator.validation.max.onError = RangeError;
 	Validator.validation.matches = function(regex,value) {
 		return new RegExp(regex).test(value);
 	}
-	
+	Validator.validation.matches.onError = RangeError;
 	if (typeof(module) !== 'undefined' && module.exports) {
 		module.exports = Validator;
 	} else if (typeof define === 'function' && define.amd) {

@@ -63,6 +63,7 @@
 	Validator.ValidationError.prototype = Object.create(Error.prototype);
 	Validator.ValidationError.prototype.constructor = Validator.ValidationError;
 	Validator.validation = {};
+	/*
 	Validator.validation.coerce = function(value,to) {
 		var coersions = {
 				string: {number: parseFloat}
@@ -73,6 +74,7 @@
 		}
 		return value;
 	}
+	*/
 	Validator.validation.required = function(required,value) {
 		return (required ? value!==undefined : true);
 	}

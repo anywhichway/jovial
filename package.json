@@ -1,6 +1,6 @@
 {
   "name": "jovial",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Javascript Object Validation Interception Augmentation Library",
   "main": "index.js",
   "scripts": {
@@ -28,14 +28,5 @@
     "chai": "^3.4.1",
     "istanbul": "^0.4.1",
     "mocha": "^2.3.4"
-  },
-  "config": {
-    "blanket": {
-      "pattern": "///[\\w-]+\\.js$/",
-      "data-cover-never": [
-        "node_modules",
-        "test"
-      ]
-    }
   }
 }

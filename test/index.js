@@ -50,7 +50,7 @@ describe('Validator', function() {
 	  });
   });
   describe('ranges',function() {
-	 it('should throw RangeError if string value set is not in range: ', function() {
+	 it('should throw RangeError if string value set is not in range', function() {
 		 var constraint = {};
 		 var range = ["a","c"];
 		 var property = "stringProperty";

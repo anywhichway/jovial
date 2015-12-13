@@ -83,6 +83,10 @@ var instance = new Person();
 instance.age = -1;
 ```
 
+# Testing
+
+Testing is conducted using Mocha, Chai, and Istanbul. 
+
 # Updates (reverse chronological order)
 
 2015-12-13 v0.0.9 Added more unit tests and documentation

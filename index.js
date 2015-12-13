@@ -32,7 +32,8 @@
 							error.errors[property].validation = (error.errors[property].validation ? error.errors[property].validation : {});
 							error.errors[property].validation[key] = {constraint: validation[key]};
 							var msg = property + ":" + (typeof(value)==="string" ? "\"" + value + "\"" : (value instanceof Object ? JSON.stringify(value) : value)) + " failed validation {\"" + key + "\":" + JSON.stringify(error.errors[property].validation[key]) + "}";
-							var propertyerror = new Error(msg);
+							Validator.validation.type.onError = TypeError;
+							var propertyerror = new (Validator.validation[key].onError ? Validator.validation[key].onError : Error)(msg);
 							error.errors[property].validation[key].error = propertyerror;
 						}
 					}

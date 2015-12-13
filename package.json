@@ -1,10 +1,10 @@
 {
   "name": "jovial",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Javascript Object Validation Interception Augmentation Library",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,9 @@
   "homepage": "https://github.com/anywhichway/jovial#readme",
   "dependencies": {
     "chrome-proxy": ""
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4"
   }
 }

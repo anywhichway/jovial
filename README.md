@@ -27,16 +27,7 @@ var instance = new Person();
 instance.name = 1;
 ```
 
-There are plans to fully support both real-time per property validation and batch validation. Hence, the errors thrown by JOVIAL are actually containers for other errors. The structure of the container error is as follows:
-
-```{object: <instance of object being validated>,
-	  errors: {
-	  		<property being violated>: {value: <value being set>, <constraint name>: {constraint: <constraint>, error: <error>}},
-	  		...
-	  }
-	 }```
-	 
-For example:
+There are plans to fully support both real-time per property validation and batch validation. Hence, the errors thrown by JOVIAL are actually containers for other errors and details regarding the causes:
 
 ```{object: {name:'Bill'},errors:{age: {value: -1, min: {constraint: 0, error: [RangeError]}}}}```
 
@@ -100,4 +91,3 @@ Testing is conducted using Mocha, Chai, and Istanbul.
 # License
 
 This software is provided as-is under the [MIT license](http://opensource.org/licenses/MIT).
-

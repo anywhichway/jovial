@@ -4,8 +4,7 @@
 //     MIT License - http://opensource.org/licenses/mit-license.php
 (function() {
 	"use strict";
-	var _global = this;
-	var Proxy = require('chrome-proxy');
+	var _global = this, ProxyConstructor;
 	function Validator(config) {
 		var me = this;
 		if(config) {
@@ -15,6 +14,11 @@
 				me[key].name = key;
 			});
 		}
+	}
+	if(typeof(Proxy)==="undefined") {
+		ProxyConstructor = require('chrome-proxy');
+	} else {
+		ProxyConstructor = Proxy;
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {
 		name = (name ? name : (constructorOrObject.name ? constructorOrObject.name : "anonymous"));
@@ -48,13 +52,13 @@
 			}
 		};
 		if(constructorOrObject instanceof Function) {
-			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,Proxy);
+			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,ProxyConstructor);
 			cons.prototype = Object.create(constructorOrObject.prototype);
 			cons.prototype.__kind__ = name;
 			cons.prototype.constructor = cons;
 			return cons;
 		}
-		return new Proxy(constructorOrObject,handler);
+		return new ProxyConstructor(constructorOrObject,handler);
 	}
 	Validator.ValidationError = function(object) {
 		this.object = object;

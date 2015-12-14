@@ -1,6 +1,6 @@
 {
   "name": "jovial",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Javascript Object Validation Interception Augmentation Library",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,6 @@
     "chrome-proxy": ""
   },
   "devDependencies": {
-    "blanket": "^1.2.1",
     "chai": "^3.4.1",
     "istanbul": "^0.4.1",
     "mocha": "^2.3.4"

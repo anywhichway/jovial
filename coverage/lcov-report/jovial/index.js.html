@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">73.2% </span>
+        <span class="strong">76.34% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>71/97</span>
+        <span class='fraction'>71/93</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">50% </span>
+        <span class="strong">53.45% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>30/60</span>
+        <span class='fraction'>31/58</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">66.67% </span>
+        <span class="strong">70.59% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>12/18</span>
+        <span class='fraction'>12/17</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">73.68% </span>
+        <span class="strong">76.92% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>70/95</span>
+        <span class='fraction'>70/91</span>
       </div>
     </div>
   </div>
@@ -184,13 +184,18 @@
 139
 140
 141
-142</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+142
+143
+144
+145
+146
+147
+148</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">10×</span>
@@ -201,6 +206,11 @@
 <span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">10×</span>
@@ -249,15 +259,17 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -331,8 +343,7 @@
 //     MIT License - http://opensource.org/licenses/mit-license.php
 (function() {
 	"use strict";
-	var _global = this;
-	var Proxy = require('chrome-proxy');
+	var _global = this, ProxyConstructor;
 	function Validator(config) {
 		var me = this;
 		if(config) {
@@ -342,6 +353,11 @@
 				me[key].name = key;
 			});
 		}
+	}
+	<span class="missing-if-branch" title="else path not taken" >E</span>if(typeof(Proxy)==="undefined") {
+		ProxyConstructor = require('chrome-proxy');
+	} else {
+<span class="cstat-no" title="statement not covered" >		ProxyConstructor = Proxy;</span>
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {
 		name = (name ? name : (constructorOrObject.name ? constructorOrObject.name : <span class="branch-1 cbranch-no" title="branch not covered" >"anonymous")</span>);
@@ -375,13 +391,13 @@
 			}
 		};
 		<span class="missing-if-branch" title="else path not taken" >E</span>if(constructorOrObject instanceof Function) {
-			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,Proxy);
+			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,ProxyConstructor);
 			cons.prototype = Object.create(constructorOrObject.prototype);
 			cons.prototype.__kind__ = name;
 			cons.prototype.constructor = cons;
 			return cons;
 		}
-<span class="cstat-no" title="statement not covered" >		return new Proxy(constructorOrObject,handler);</span>
+<span class="cstat-no" title="statement not covered" >		return new ProxyConstructor(constructorOrObject,handler);</span>
 	}
 	Validator.ValidationError = function(object) {
 		this.object = object;
@@ -390,16 +406,18 @@
 	Validator.ValidationError.prototype = Object.create(Error.prototype);
 	Validator.ValidationError.prototype.constructor = Validator.ValidationError;
 	Validator.validation = {};
-	Validator.validation.coerce = <span class="fstat-no" title="function not covered" >function(value,to) {</span>
-<span class="cstat-no" title="statement not covered" >		var coersions = {</span>
+	/*
+	Validator.validation.coerce = function(value,to) {
+		var coersions = {
 				string: {number: parseFloat}
 		};
-<span class="cstat-no" title="statement not covered" >		var from = typeof(value);</span>
-<span class="cstat-no" title="statement not covered" >		if(coersions[from] &amp;&amp; coersions[from][to]) {</span>
-<span class="cstat-no" title="statement not covered" >			return coersions[from][to](value);</span>
+		var from = typeof(value);
+		if(coersions[from] &amp;&amp; coersions[from][to]) {
+			return coersions[from][to](value);
 		}
-<span class="cstat-no" title="statement not covered" >		return value;</span>
+		return value;
 	}
+	*/
 	Validator.validation.required = <span class="fstat-no" title="function not covered" >function(required,value) {</span>
 <span class="cstat-no" title="statement not covered" >		return (required ? value!==undefined : true);</span>
 	}
@@ -472,7 +490,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Dec 13 2015 15:10:39 GMT-0500 (Eastern Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Dec 13 2015 17:17:10 GMT-0500 (Eastern Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

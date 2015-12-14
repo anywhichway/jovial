@@ -1,6 +1,8 @@
-var expect = require("chai").expect;
-var Validator = require('../index.js');
-
+var expect, Validator;
+if(typeof(window)==="undefined") {
+	expect = require("chai").expect;
+	Validator = require('../index.js');
+}
 
 
 function TestObject() {

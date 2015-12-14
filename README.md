@@ -80,6 +80,8 @@ Testing is conducted using Mocha, Chai, and Istanbul.
 
 # Updates (reverse chronological order)
 
+2015-12-13 v0.0.10 Corrected README format
+
 2015-12-13 v0.0.9 Added more unit tests and documentation
 
 2015-12-13 v0.0.8 Added unit tests and missing error handlers for min, max, matches

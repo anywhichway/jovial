@@ -15,7 +15,7 @@
 			});
 		}
 	}
-	if(typeof(Proxy)==="undefined") {
+	if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
 		ProxyConstructor = require('chrome-proxy');
 	} else {
 		ProxyConstructor = Proxy;

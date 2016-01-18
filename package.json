@@ -30,6 +30,6 @@
     "mocha": "^2.3.4"
   },
   "dependencies": {
-    "chrome-proxy": "0.0.7"
+    "chrome-proxy": "0.0.8"
   }
 }

@@ -125,9 +125,9 @@ Building & testing is conducted using Travis, Mocha, Chai, and Istanbul.
 
 # Updates (reverse chronological order)`
 
-2015-12-18 v0.0.12 Corrected issue where underlying values did not get set after validation. Added more unit tests. Added *.length, .in, .transform*. Added support for property delete and define.
+2016-01-18 v0.0.12 Corrected issue where underlying values did not get set after validation. Added more unit tests. Added *.length, .in, .transform*. Added support for property delete and define.
 
-2015-12-13 v0.0.11 Added browserified and minified version.
+2016-01-13 v0.0.11 Added browserified and minified version.
 
 2015-12-13 v0.0.10 Corrected README format
 

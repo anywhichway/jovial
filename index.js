@@ -75,7 +75,7 @@
 			}
 		};
 		if(constructorOrObject instanceof Function) {
-			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,Proxy);
+			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,(typeof(Proxy)!=="undefined" ? Proxy : ProxyConstructor));
 			cons.prototype = Object.create(constructorOrObject.prototype);
 			cons.prototype.__kind__ = name;
 			cons.prototype.constructor = cons;

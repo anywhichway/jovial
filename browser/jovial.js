@@ -76,7 +76,7 @@
 			}
 		};
 		if(constructorOrObject instanceof Function) {
-			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,Proxy);
+			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,(typeof(Proxy)!=="undefined" ? Proxy : ProxyConstructor));
 			cons.prototype = Object.create(constructorOrObject.prototype);
 			cons.prototype.__kind__ = name;
 			cons.prototype.constructor = cons;
@@ -195,7 +195,7 @@
 				Object.original[fname] = oldf;
 				Object[fname] = function() {
 					var object = arguments[0];
-					if(object instanceof Proxy) {
+					if(typeof(Proxy)!=="undefined" && object instanceof Proxy) {
 						if(fname==="getOwnPropertyNames" && object.ownKeys) {
 							return object.ownKeys(object.__target__);
 						} else if(object.__handler__[fname]) {

@@ -1,10 +1,13 @@
 {
   "name": "jovial",
-  "version": "0.0.10",
+  "version": "0.0.12",
   "description": "Javascript Object Validation Interception Augmentation Library",
   "main": "index.js",
+  "isomorphic": true,
   "scripts": {
-    "test": "istanbul cover node_modules/mocha/bin/_mocha"
+    "test": "istanbul cover node_modules/mocha/bin/_mocha --report lcov -- -R spec",
+    "browserify": "browserify index.js -o browser/jovial.js",
+    "minify": "minify browser/jovial.js"
   },
   "repository": {
     "type": "git",
@@ -20,13 +23,10 @@
     "url": "https://github.com/anywhichway/jovial/issues"
   },
   "homepage": "https://github.com/anywhichway/jovial#readme",
-  "dependencies": {
-    "chrome-proxy": ""
-  },
   "devDependencies": {
     "chai": "^3.4.1",
     "codeclimate-test-reporter": "^0.2.0",
-    "istanbul": "^0.4.1",
+    "istanbul": "^0.4.2",
     "mocha": "^2.3.4"
   }
 }

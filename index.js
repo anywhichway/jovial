@@ -1,10 +1,10 @@
 //     jovial
 //
-//     Copyright (c) 2015 Simon Y. Blackwell, AnyWhichWay
+//     Copyright (c) 2015, 2016 Simon Y. Blackwell, AnyWhichWay
 //     MIT License - http://opensource.org/licenses/mit-license.php
 (function() {
 	"use strict";
-	var _global = this, ProxyConstructor;
+	var ProxyConstructor;
 	function Validator(config) {
 		var me = this;
 		if(config) {
@@ -24,10 +24,28 @@
 		name = (name ? name : (constructorOrObject.name ? constructorOrObject.name : "anonymous"));
 		var validator = this, cons;
 		var handler = {
-			set: function(target,property,value) { // ,proxy
+			deleteProperty: function(target,property,proxy) {
+				var validation = validator[property];
+				if(Validator.validation.required(validation.required,undefined)) {
+					delete target[property];
+					return true;
+				}
+				handler.set(target,property,undefined,proxy,true);
+			},
+			defineProperty: function(target, property, descriptor, proxy) {
+				if(handler.set(target, property, descriptor.value, proxy, true)) {
+					Object.defineProperty(target, property, descriptor);
+				}
+			},
+			set: function(target,property,value,proxy,skipset) { 
 				var validation = validator[property], keys = Object.keys(validation), error;
+				try {
+					value = (validation.transform ? Validator.validation.transform(validation.transform,value) : value);
+				} catch(e) {
+					error = e;
+				}
 				keys.forEach(function(key) {
-					if(typeof(Validator.validation[key])==="function") {
+					if(typeof(Validator.validation[key])==="function" && key!=="transform") {
 						var result = Validator.validation[key](validation[key],value);
 						if(!result) {
 							error = (error ? error : new Validator.ValidationError(target));
@@ -48,11 +66,16 @@
 					} else {
 						throw error;
 					}
+				} else  {
+					if(!skipset) {
+						target[property] = value;
+					}
+					return true;
 				}
 			}
 		};
 		if(constructorOrObject instanceof Function) {
-			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,ProxyConstructor);
+			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,Proxy);
 			cons.prototype = Object.create(constructorOrObject.prototype);
 			cons.prototype.__kind__ = name;
 			cons.prototype.constructor = cons;
@@ -67,21 +90,55 @@
 	Validator.ValidationError.prototype = Object.create(Error.prototype);
 	Validator.ValidationError.prototype.constructor = Validator.ValidationError;
 	Validator.validation = {};
-	/*
-	Validator.validation.coerce = function(value,to) {
-		var coersions = {
-				string: {number: parseFloat}
-		};
-		var from = typeof(value);
-		if(coersions[from] && coersions[from][to]) {
-			return coersions[from][to](value);
-		}
-		return value;
+	
+	Validator.validation.transform = function(f,value) {
+		return f(value);
 	}
-	*/
+	
+	Validator.validation.between = function(between,value) {
+		between.sort(function(a,b) { return a - b; });
+		var min = between[0];
+		var max = between[between.length-1];
+		return value>=min && value<=max;
+	}
+	Validator.validation.between.onError = RangeError;
+	
+	Validator.validation.in = function(values,value) {
+		return values.indexOf(value)>=0;
+	}
+	Validator.validation.in.onError = RangeError;
+	
+	Validator.validation.length = function(length,value) {
+		if(length instanceof Array) {
+			length.sort(function(a,b) { return a - b; });
+			var min = length[0];
+			var max = length[length.length-1];
+			return value.length>=min && value.length<=max;
+		}
+		return value.length===length;
+	}
+	Validator.validation.length.onError = RangeError;
+	
+	Validator.validation.matches = function(regex,value) {
+		return new RegExp(regex).test(value);
+	}
+	Validator.validation.matches.onError = RangeError;
+	
+	Validator.validation.max = function(max,value) {
+		return value<=max;
+	}
+	Validator.validation.max.onError = RangeError;
+	
+	Validator.validation.min = function(min,value) {
+		return value>=min;
+	}
+	Validator.validation.min.onError = RangeError;
+	
 	Validator.validation.required = function(required,value) {
 		return (required ? value!==undefined : true);
 	}
+	Validator.validation.required.onError = TypeError;
+	
 	Validator.validation.type = function(type,value) {
 		var tel = {
 				us: /^[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}$/
@@ -110,39 +167,13 @@
 		return false;
 	}
 	Validator.validation.type.onError = TypeError;
-	Validator.validation.between = function(between,value) {
-		between.sort(function(a,b) { return a - b; });
-		var min = between[0];
-		var max = between[between.length-1];
-		return value>=min && value<=max;
-	}
-	Validator.validation.between.onError = RangeError;
-	Validator.validation.min = function(min,value) {
-		return value>=min;
-	}
-	Validator.validation.min.onError = RangeError;
-	Validator.validation.max = function(max,value) {
-		return value<=max;
-	}
-	Validator.validation.max.onError = RangeError;
-	Validator.validation.matches = function(regex,value) {
-		return new RegExp(regex).test(value);
-	}
-	Validator.validation.matches.onError = RangeError;
-	if (typeof(module) !== 'undefined' && module.exports) {
-		module.exports = Validator;
+	
+	if(typeof(window)==="object") {
+		window.Validator = Validator;
 	} else if (typeof define === 'function' && define.amd) {
 		// Publish as AMD module
 		define(function() {return Validator;});
 	} else {
-		// Publish as global (in browsers)
-		var _previousRoot = _global.Validator;
-		// **`noConflict()` - (browser only) to reset global 'Validator' var**
-		Validator.noConflict = function() {
-			_global.Validator = _previousRoot;
-			return Validator;
-		};
-		_global.Validator = Validator;
+		module.exports = Validator;
 	}
-	
-}).call(this);
+})();

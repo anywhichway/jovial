@@ -17,7 +17,7 @@ npm install jovial
 
 The index.js and package.json files are compatible with https://github.com/anywhichway/node-require so that joex can be served directly to the browser from the node-modules/joex directory when using node Express.
 
-JOVIAL is implemented using a Proxy. For Chrome, where the Proxy object is not yet available, the shim https://github.com/anywhichway/chrome-proxy should be used. The current implementation loads *chrome-proxy* using *require* from https://github.com/anywhichway/node-require. Alternatively, the programmer should ensure *chrome-proxy* is loaded beforehand in the browser
+Browser code can also be found in the browser directory at https://github.com/anywhichway/jovial.
 
 
 # Usage
@@ -42,17 +42,27 @@ There are plans to fully support both real-time per property validation and batc
 
 Currently JOVIAL supports:
 
-primitive Javascript type checking, type = 'SSN', type = 'tel'; min, max, and between for numbers and strings; match = RegExp, required = true | false.
+*.type* - primitive Javascript type checking for "string" | "boolean" | "function" | "object" | "SSN" | "tel" | function. If a function is provided as a type, then the function is assumed to be a constructor and an *instanceof* check is done.
 
-The following are in development:
+*.min*, *.max*, and *.between* = number | string
 
-type coercion, length tests, soundex.
+*.match* = RegExp
+
+*.required* = true | false
+
+*.in* = \<array instance\> for verifying membership in a restricted list
+
+*.length* = number |  \<array instance\> for strings and arrays. If *.length is an array, then its min and a max are used for testing the min and max length of the target value
+
+*.transform* = function to transform values prior to setting them on the underlying object, e.g. `{name: {transform: function(v) { return v+"";}}` The transformation occurs before any validation.
+
+Soundex and echoes are in development:
 
 If you would like others, then post an issue to GitHub with the code based on the extension instructions below.
 
 # Extending JOVIAL
 
-Extending JOVIAL is as simple as adding methods to the Validator class by the same name as the constraint desired on properties and providing an optional error type. For example, the constraints 'between' and 'min' are implemented as:
+Extending JOVIAL is as simple as adding methods to the Validator class by the same name as the constraint desired on properties and providing an optional error type. For example, the constraints 'between' and 'min' and 'max' are implemented as:
 
 ```
 Validator.validation.between = function(between,value) {
@@ -62,17 +72,19 @@ Validator.validation.between = function(between,value) {
 		return value>=min && value<=max;
 }
 Validator.validation.between.onError = RangeError;
+
 Validator.validation.min = function(min,value) {
 		return value>=min;
 }
 Validator.validation.min.onError = RangeError;
+
 Validator.validation.max = function(max,value) {
 		return value<=max;
 }
 Validator.validation.max.onError = RangeError;
 ```
 
-And, we can extend the Person example as follows:
+Using the above, we can extend the Person example as follows:
 
 ```
 function Person() { }
@@ -105,11 +117,17 @@ var instance = new Person();
 instance.age = -1;
 ```
 
+For versions of Chrome not supporting a Proxy the browser code includes the shim https://github.com/anywhichway/chrome-proxy while the server code has a dependency and does a conditional require.
+
 # Building & Testing
 
 Building & testing is conducted using Travis, Mocha, Chai, and Istanbul. 
 
-# Updates (reverse chronological order)
+# Updates (reverse chronological order)`
+
+2015-12-18 v0.0.12 Corrected issue where underlying values did not get set after validation. Added more unit tests. Added *.length, .in, .transform*. Added support for property delete and define.
+
+2015-12-13 v0.0.11 Added browserified and minified version.
 
 2015-12-13 v0.0.10 Corrected README format
 

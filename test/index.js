@@ -31,20 +31,22 @@ describe('Validator ', function() {
 	var result = new constructor();
 	expect(result.__kind__).to.be.equal(name);
   });
-  it('should throw TypeError if required property is deleted ', function() {
-		 var constraint = {stringProperty: {required: true}};
-		 var validator = new Validator(constraint);
-		 var constructor = validator.bind(TestObject,null,"TestObject");
-		 var instance = new constructor();
-		var result;
-		try {
-			delete instance.stringProperty;
-		} catch(err) {
-			result = err;
-		}
-		expect(result).to.be.an.instanceOf(Error);
-		expect(result.errors.stringProperty.validation.required.error).to.be.an.instanceOf(TypeError);
-	 });
+  if(typeof(window)==="object") {
+	  it('should throw TypeError if required property is deleted ', function() {
+			 var constraint = {stringProperty: {required: true}};
+			 var validator = new Validator(constraint);
+			 var constructor = validator.bind(TestObject,null,"TestObject");
+			 var instance = new constructor();
+			var result;
+			try {
+				delete instance.stringProperty;
+			} catch(err) {
+				result = err;
+			}
+			expect(result).to.be.an.instanceOf(Error);
+			expect(result.errors.stringProperty.validation.required.error).to.be.an.instanceOf(TypeError);
+		 });
+   }
    it('should transform values ', function() {
 		 var constraint = {stringProperty: {transform: function(v) { return v+"b"; }}};
 		 var validator = new Validator(constraint);

@@ -125,6 +125,8 @@ Building & testing is conducted using Travis, Mocha, Chai, and Istanbul.
 
 # Updates (reverse chronological order)
 
+2016-01-21 v0.0.14 Updated dependency on chrome-proxy to > 0.0.8. 
+
 2016-01-21 v0.0.13 Reworked module closure wrapper so it would work regardless of whether *browserify* is used. 
 
 2016-01-18 v0.0.12 Corrected issue where underlying values did not get set after validation. Added more unit tests. Added *.length, .in, .transform*. Added support for property delete and define.

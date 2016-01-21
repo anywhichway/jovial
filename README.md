@@ -123,7 +123,9 @@ For versions of Chrome not supporting a Proxy the browser code includes the shim
 
 Building & testing is conducted using Travis, Mocha, Chai, and Istanbul. 
 
-# Updates (reverse chronological order)`
+# Updates (reverse chronological order)
+
+2016-01-21 v0.0.13 Reworked module closure wrapper so it would work regardless of whether *browserify* is used. 
 
 2016-01-18 v0.0.12 Corrected issue where underlying values did not get set after validation. Added more unit tests. Added *.length, .in, .transform*. Added support for property delete and define.
 

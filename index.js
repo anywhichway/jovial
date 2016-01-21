@@ -168,12 +168,12 @@
 	}
 	Validator.validation.type.onError = TypeError;
 	
-	if(typeof(window)==="object") {
-		window.Validator = Validator;
+	if (this.exports) {
+		this.exports  = Validator;
 	} else if (typeof define === 'function' && define.amd) {
 		// Publish as AMD module
-		define(function() {return Validator;});
+		define(function() {return Proxy;});
 	} else {
-		module.exports = Validator;
+		this.Validator = Validator;
 	}
-})();
+}).call((typeof(window)!=='undefined' ? window : (typeof(module)!=='undefined' ? module : null)));

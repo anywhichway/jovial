@@ -1,8 +1,9 @@
 {
   "name": "jovial",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Javascript Object Validation Interception Augmentation Library",
   "main": "index.js",
+  "client": "./browser/jovial.js",
   "isomorphic": true,
   "scripts": {
     "test": "istanbul cover node_modules/mocha/bin/_mocha --report lcov -- -R spec",

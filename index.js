@@ -218,7 +218,7 @@
 		var tel = {
 				us: /^[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}$/
 		};
-		if(typeof(value)===type) {
+		if(value===undefined || typeof(value)===type) {
 			return true;
 		}
 		if(typeof(type)==="function") {

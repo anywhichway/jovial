@@ -117,7 +117,7 @@ The developer supplied function should take a single argument and return *true* 
 
 *.type* = "string" | "boolean" | "function" | "object" | "SSN" | "tel" | "latlon" | function
 
-If a function is provided as a type, then the function is assumed to be a constructor and an *instanceof* check is done. 
+If a function is provided as a type, then the function is assumed to be a constructor and an *instanceof* check is done. If a target value is *unknown* then the type is assumed to match, otherwise type checking would behave like *.required*.
 
 ####SSN 
 
@@ -211,7 +211,9 @@ Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the
 
 # Updates (reverse chronological order)
 
-2016-01-23 v0.0.14 Addressed issue where Proxy sometimes did not get loaded and lifted to global scope by Browserify.
+2016-01-23 v0.0.18 Modified type checking to ignore unknown values.
+
+2016-01-23 v0.0.17 Addressed issue where Proxy sometimes did not get loaded and lifted to global scope by Browserify.
 
 2016-01-23 v0.0.16 Cleaned-up Proxy bundling for Chrome. Corrected documentation regarding structure of ValidationError. Add non-null test for length validation.
 

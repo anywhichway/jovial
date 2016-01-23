@@ -29,7 +29,6 @@
 		
 		return (r + '000').slice(0, 4).toUpperCase();
 	}
-	var ProxyConstructor;
 	function Validator(config) {
 		var me = this;
 		if(config) {
@@ -40,9 +39,9 @@
 			});
 		}
 	}
-	var Proxy;
+	var Proxy, ProxyConstructor;
 	if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
-		var ProxyConstructor = require('chrome-proxy');
+		ProxyConstructor = require('chrome-proxy');
 		if(typeof(ProxyConstructor)==="function") {
 			Proxy = ProxyConstructor;
 		} else if(this.Proxy) {

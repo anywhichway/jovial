@@ -38,7 +38,7 @@ describe('Validator ', function() {
 		var validator = new Validator(constraint);
 		var constructor = validator.bind(TestObject,function(err) { done(); });
 		var instance = new constructor();
-		instance.stringProperty = undefined;
+		instance.stringProperty = null;
 	  });
   it('should have __kind__ with same name as constructor if not specified, i.e. ' + name, function() {
 	var validator = new Validator();
@@ -181,7 +181,7 @@ describe('Validator ', function() {
 		it('should throw TypeError if value set is not a ' + typeof(to[property]), function () {
 			var result;
 			try {
-				instance[property] = undefined;
+				instance[property] = (typeof(to[property])==="object" ? 1 : null);
 			} catch(err) {
 				result = err;
 			}

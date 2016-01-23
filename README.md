@@ -1,7 +1,15 @@
 # JOVIAL
 Javascript Object Validation Interception Augmentation Library.
 
-A light weight, easily extensible validation mechanism for Javascript objects.
+A light weight, easily extensible validation mechanism for Javascript objects that supports both batch and real-time per property validation. Here is an example Validator:
+
+```new Validator({name: {type: 'string', length: 25, required: true}, 
+                  age: {type: 'number', min:0, max: 110},
+                  gender: {in: ['male','female']},
+                  ssn: {type: 'SSN'},
+                  location: {type: 'latlon'}})```
+                
+Also supported are RegExp matching, soundex testing, range testing, developer supplied functions.
 
 [![Build Status](https://travis-ci.org/anywhichway/jovial.svg)](https://travis-ci.org/anywhichway/jovial)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/42cd44eee8794c22aa7a4f780abd2d0b)](https://www.codacy.com/app/syblackwell/jovial)
@@ -30,7 +38,7 @@ The below will constrain 'name' to be a string and 'age' to be a number with a m
 
 *\<validator\>.bind(constructorOrInstance,onError,name)*
 
-Validators are bound to either constructors or object instances using this instance method. If an *onError* callback is not provided, then attempts to set invalid property values on the bound object will throw errors. The *onError* callback takes one argument, the error that would otherwise have been thrown. The *name* argument is optional except in IE where the *.name* property is unavailable for Function objects. The names of bound constructors are used internal to the JOVIAL library for look-ups and must be available. 
+Validators are bound to either constructors or object instances using the *.bind* instance method. If an *onError* callback is not provided, then attempts to set invalid property values on the bound object will throw errors. The *onError* callback takes one argument, the error that would otherwise have been thrown. The *name* argument is optional except in IE where the *.name* property is unavailable for Function objects. The names of bound constructors are used internal to the JOVIAL library for look-ups and must be available. 
 
 The *.bind* method returns either a new instrumented constructor or a proxy for the bound object. The new instrumented constructor should be used in place of the original constructor.
 

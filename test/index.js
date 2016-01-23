@@ -255,21 +255,66 @@ describe('Validator ', function() {
 				instance.stringProperty = "(800) 555-1212";
 				expect(instance.stringProperty).to.equal("(800) 555-1212");
 			});
-		  });
-	  it('should throw TypeError if value is not tel ', function() {
-		var constraint = {stringProperty: {type: "SSN"}};
-		var validator = new Validator(constraint);
-		var constructor = validator.bind(TestObject,null,"TestObject");
-		var instance = new constructor();
-		var result;
-		try {
-			instance.stringProperty = "a";
-		} catch(err) {
-			result = err;
-		}
-		expect(result).to.be.an.instanceOf(Error);
-		expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
-	  });
+			it('should throw TypeError if value is not tel ', function() {
+				var constraint = {stringProperty: {type: "SSN"}};
+				var validator = new Validator(constraint);
+				var constructor = validator.bind(TestObject,null,"TestObject");
+				var instance = new constructor();
+				var result;
+				try {
+					instance.stringProperty = "a";
+				} catch(err) {
+					result = err;
+				}
+				expect(result).to.be.an.instanceOf(Error);
+				expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
+			});
+	  	});
+	  
+	  describe('latlon type ', function() {
+			var constraint = {stringProperty: {type: "latlon"}};
+			var validator = new Validator(constraint);
+			var constructor = validator.bind(TestObject,null,"TestObject");
+			var instance = new constructor();
+			it('should support 40:26:46N,079:56:55W ', function() {
+				instance.stringProperty = "40:26:46N,079:56:55W";
+				expect(instance.stringProperty).to.equal("40:26:46N,079:56:55W");
+			});
+			it('should support 40d 26m 47s N 079d 58\' 36" W ', function() {
+				instance.stringProperty = "40d 26m 47s N 079d 58' 36\" W";
+				expect(instance.stringProperty).to.equal("40d 26m 47s N 079d 58' 36\" W");
+			});
+			it('should support 40°26\'47"N 079°58\'36"W ', function() {
+				instance.stringProperty = "40°26'47\"N 079°58'36\"W";
+				expect(instance.stringProperty).to.equal("40°26'47\"N 079°58'36\"W");
+			});
+			it('should support 90 00 00.0, 180 00 00.0 ', function() {
+				instance.stringProperty = "90 00 00.0, 180 00 00.0";
+				expect(instance.stringProperty).to.equal("90 00 00.0, 180 00 00.0");
+			});
+			it('should support 89 59 50.4141 S 090 29 20.4 E ', function() {
+				instance.stringProperty = "89 59 50.4141 S 090 29 20.4 E";
+				expect(instance.stringProperty).to.equal("89 59 50.4141 S 090 29 20.4 E");
+			});
+			it('should support 00 00 00.0, 000 00 00.0 ', function() {
+				instance.stringProperty = "00 00 00.0, 000 00 00.0";
+				expect(instance.stringProperty).to.equal("00 00 00.0, 000 00 00.0");
+			});
+			it('should throw TypeError if value is not a latlon ', function() {
+				var constraint = {stringProperty: {type: "latlon"}};
+				var validator = new Validator(constraint);
+				var constructor = validator.bind(TestObject,null,"TestObject");
+				var instance = new constructor();
+				var result;
+				try {
+					instance.stringProperty = "a";
+				} catch(err) {
+					result = err;
+				}
+				expect(result).to.be.an.instanceOf(Error);
+				expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
+			});
+	  	});
   });
   describe('ranges',function() {
 	 it('should throw RangeError if string value set is not in range ', function() {

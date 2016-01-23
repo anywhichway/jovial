@@ -36,9 +36,11 @@ The below will constrain 'name' to be a string and 'age' to be a number with a m
 
 ```var validator = new Validator({name: {type: 'string'}, age: {type: 'number', min:0}})``` 
 
-*\<validator\>.bind(constructorOrInstance,onError,name)*
+*\<validator\>.bind(constructorOrInstance,onError[,name])*
 
-Validators are bound to either constructors or object instances using the *.bind* instance method. If an *onError* callback is not provided, then attempts to set invalid property values on the bound object will throw errors. The *onError* callback takes one argument, the error that would otherwise have been thrown. The *name* argument is optional except in IE where the *.name* property is unavailable for Function objects. The names of bound constructors are used internal to the JOVIAL library for look-ups and must be available. 
+Validators are bound to either constructors or object instances using the *.bind* instance method. If an *onError* callback is not provided, then attempts to set invalid property values on the bound object will throw errors. The *onError* callback takes one argument, the error that would otherwise have been thrown. 
+
+The *name* argument is optional except in IE when binding a constructor because IE does not make available the *.name* property for Function objects. The names of bound constructors are used internal to the JOVIAL library for look-ups and must be available. 
 
 The *.bind* method returns either a new instrumented constructor or a proxy for the bound object. The new instrumented constructor should be used in place of the original constructor.
 

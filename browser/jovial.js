@@ -42,7 +42,10 @@
 		}
 	}
 	if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
-		require('chrome-proxy');
+		var ProxyConstructor = require('chrome-proxy');
+		if(typeof(ProxyConstructor)==="function") {
+			var Proxy = ProxyConstructor;
+		}
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {
 		function validate(target,property,value,proxy,skipset,skiponerror,error) { 

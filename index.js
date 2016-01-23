@@ -42,8 +42,8 @@
 	}
 	if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
 		var ProxyConstructor = require('chrome-proxy');
-		if(this!==window) {
-			Proxy = Constructor;
+		if(typeof(ProxyConstructor)==="function") {
+			var Proxy = ProxyConstructor;
 		}
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {

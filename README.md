@@ -22,47 +22,127 @@ Browser code can also be found in the browser directory at https://github.com/an
 
 # Usage
 
-The core of JOVIAL is the Validator class. The constructor for Validator takes a configuration object consisting of properties with the same names as those to be validated on a target object. The property values for the configuration object control the validation of the same named properties on a target object. For example:
+The core of JOVIAL is the Validator class. The constructor for Validator takes a configuration object consisting of properties with the same names as those to be validated on a target object. These properties contain configuration data restricting types, lengths, etc. or provide for value transformation prior to validation and final setting on a property.
 
-```{name : {type: 'string'}}``` will constrain 'name' to be a string.
+The below will constrain 'name' to be a string and 'age' to be a number with a minimum value of 0 once the validator is bound to something:
 
-Validators are bound to either constructors or object instances using the Validator instance method *.bind(constructorOrInstance,onError,name)*. If an *onError* callback is not provided, then attempts to set invalid property values on the bound object will throw errors. The *onError* callback takes one argument, the error that would otherwise have been thrown. The *name* argument is optional except in IE where the *.name* property is unavailable for Function objects. The names of bound constructors are used internal to the library for look-ups and must be available. The *.bind* method returns either a new instrumented constructor or a proxy for the bound object. The new instrumented constructor should be used in place of the original constructor. For example, the following will throw an error:
+```var validator = new Validator({name: {type: 'string'}, age: {type: 'number', min:0}})``` 
+
+*\<validator\>.bind(constructorOrInstance,onError,name)*
+
+Validators are bound to either constructors or object instances using this instance method. If an *onError* callback is not provided, then attempts to set invalid property values on the bound object will throw errors. The *onError* callback takes one argument, the error that would otherwise have been thrown. The *name* argument is optional except in IE where the *.name* property is unavailable for Function objects. The names of bound constructors are used internal to the JOVIAL library for look-ups and must be available. 
+
+The *.bind* method returns either a new instrumented constructor or a proxy for the bound object. The new instrumented constructor should be used in place of the original constructor.
+
+## Validation Methods
+
+*\<bound object\>.validate(trap)*
+
+Once bound, an object or instance returned from a bound constructor will have a *.validate* method. Invoking *.validate()* will attempt to validate all properties. 
+
+If *trap* is true, then a consolidated *Validator.ValidationError* or *undefined* will be returned. If *trap* is false, then either the *onError* provided during binding will be called with the consolidated error, or, if *onError* is undefined, the consolidated error will be thrown.
+
+For example, the following will throw errors:
 
 ```
-function Person() { }
-var validator = new Validator({name: {type: 'string'}});
-Person = validator.bind(Person);
+function Person() { p1.name = null, p1.age = null }
+
+var validator = new Validator({name: {type: 'string'}, age: {type: 'number'}});
+
+var p1 = new Person();
+p1.name = 2; // intentionally incorrect type for example
+p1.age = "20"; 
+p1 = validator.bind(p1); // binds validator to object so it will have validation
+p1.validate(); // performs batch validation, an error will be thrown here
+
+Person = validator.bind(Person); // binds validator to constructor so all instances have validation
 var instance = new Person();
-instance.name = 1;
+instance.name = 1; // real-time per property validation will be invoked, so an type error will be thrown here
+
 ```
 
-There are plans to fully support both real-time per property validation and batch validation. Hence, the errors thrown by JOVIAL are actually containers for other errors and details regarding the causes:
+Since JOVIAL supports both real-time per property validation and batch validation,the *Validator.ValidationError* thrown by JOVIAL is actually a container for other errors and details regarding the causes, e.g.:
 
-```{object: {name:'Bill'},errors:{age: {value: -1, min: {constraint: 0, error: [RangeError]}}}}```
+```{object: {name:null, age:null},errors:{name: {value: 2, type: {constraint: "string", error: [TypeError]}},{age: {value: -1, min: {constraint: 0, error: [RangeError]}}}}```
 
-Currently JOVIAL supports:
+The *.object* key points to the target object.
 
-*.type* - primitive Javascript type checking for "string" | "boolean" | "function" | "object" | "SSN" | "tel" | function. If a function is provided as a type, then the function is assumed to be a constructor and an *instanceof* check is done.
+The *.errors* key points to an object for which there will be one key for every property that failed validation. The form is a follows:
 
-*.min*, *.max*, and *.between* = number | string
+```{<property>:
+     {value: <invalid value>,
+     {<failed constraint name 1>: {constraint: <constraint value 1>, error: <Error 1>},
+     {<failed constraint name 2>: {constraint: <constraint value 2>, error: <Error 2>},
+     ...
+    }````
 
-*.match* = RegExp
+*.echoes* = string 
+
+Tests to see is the target value has the same soundex as a constraint
+
+*.min*, *.max*, and *.between* = number | string | Array
+
+Ensures the value is greater than the provided min or max or between the values in what is assumed to be a 2 value array. The array constraint is ascending sorted prior to testing the target value and its first and last members are used as the min and max respectively.
+
+*.matches* = RegExp
+
+Ensures a value matches the provided regular expression.
 
 *.required* = true | false
 
-*.in* = \<array instance\> for verifying membership in a restricted list
+Throws an error is a property is missing or there is an attempt to delete it. Note, the deletion attempt must be done in a context that allows the error to bubble, so it may fail to work in some asych code situations. For example chrome-proxy uses Object.observe to manage property deletion. Objects proxied through chrome-proxy will not get proper validation for this constraint.
 
-*.length* = number |  \<array instance\> for strings and arrays. If *.length is an array, then its min and a max are used for testing the min and max length of the target value
+*.in* = Array 
 
-*.transform* = function to transform values prior to setting them on the underlying object, e.g. `{name: {transform: function(v) { return v+"";}}` The transformation occurs before any validation.
+Verifies the target value is a member of the provide array
 
-Soundex and echoes are in development:
+*.length* = number |  Array
 
-If you would like others, then post an issue to GitHub with the code based on the extension instructions below.
+Supports length checking on values with a length or count property, typically strings, Arrays and Sets. If *.length itself is an array, then its min and a max are used for testing the min and max length of the target value.
+
+*.satisfies* = function(any)
+
+The developer supplied function should take a single argument and return *true* if the argument is a valid value and *false* if not.
+
+*.type* = "string" | "boolean" | "function" | "object" | "SSN" | "tel" | "latlon" | function
+
+If a function is provided as a type, then the function is assumed to be a constructor and an *instanceof* check is done. 
+
+####SSN 
+
+Matches ###-##-##. Note, a value that looks like an SSN but is not actually a legal government issued number will pass.
+
+####tel 
+
+Matches paretheses, dash, and dot separated US telephone numbers. Note, a value that looks like an telephone number but is not actually an active telephone company number will pass.
+
+####latlon
+	
+Latitude and Longitude in Degrees Minutes Seconds (DMS) zero padded, separated by spaces or : or (d, m, s) or (°, ', ") or run together and followed by cardinal direction initial (N,S,E,W) Longitude Degree range: -180 to 180 Latitude Degree range: -90 to 90 Minute range: 0 to 60 Second range: 0.00 to 60.00 Note: Only seconds can have decimals places. A decimal point with no trailing digits is invalid.
+
+Matches	
+
+40:26:46N,079:56:55W | 40°26'47"N 079°58'36"W | 40d 26m 47s N 079d 58' 36" W | 90 00 00.0, 180 00 00.0 | 89 59 50.4141 S 090 29 20.4 E | 00 00 00.0, 000 00 00.0
+
+Non-Matches	
+
+90 00 00.001 N 180 00 00.001 E | 9 00 00.00 N 79 00 00.00 E | 9 00 00.00, -79 00 00.00 | 90 61 50.4121 S 090 29 20.4 E | -90 48 50. N -090 29 20.4 E | 90 00 00. N, 180 00 00. E | 00 00 00., 000 00 00.
+
+If you would like additional validation methods, then post an issue to GitHub with the code based on the instructions in **Extending JOVIAL** below.
+
+## Augmentation Methods
+
+*.transform* = function(any)
+
+The developer supplied function takes the target value to transform and returns a replacement prior to setting it on the underlying object. The below will ensure all names are strings:
+
+```{name: {transform: function(v) { return v+"";}}```
+
+The transformation occurs before any validation.
 
 # Extending JOVIAL
 
-Extending JOVIAL is as simple as adding methods to the Validator class by the same name as the constraint desired on properties and providing an optional error type. For example, the constraints 'between' and 'min' and 'max' are implemented as:
+Extending JOVIAL is as simple as adding methods to the Validator class by the same name as the constraint desired and providing an optional error type. For example, the constraints 'between' and 'min' and 'max' are implemented as:
 
 ```
 Validator.validation.between = function(between,value) {
@@ -88,7 +168,7 @@ Using the above, we can extend the Person example as follows:
 
 ```
 function Person() { }
-var validator = new Validator({name: {type: 'string'}, age:{min: 0, max: 110}}});
+var validator = new Validator({name: {type: 'string'}, age:{type: 'number', min: 0, max: 110}}});
 Person = validator.bind(Person);
 var instance = new Person();
 instance.age = 120; // throws a RangeError {object: {},errors:{age: {value: 120, max: {constraint: 110, error: [RangeError]}}}}
@@ -98,32 +178,29 @@ or
 
 ```
 function Person() { }
-var validator = new Validator({name: {type: 'string'}, age:{between: [0,110]}});
+var validator = new Validator({name: {type: 'string'}, age:{type: 'number', between: [0,110]}});
 Person = validator.bind(Person);
 var instance = new Person();
 instance.age = 120; // throws a RangeError {object: {},errors:{age: {value: 120, between: {constraint: [0,110], error: [RangeError]}}}}
 ```
 
-
 # Implementation
 
-JOVIAL is implemented using a Proxy. As attempts are made to modify the properties of target objects at runtime the validation routines are called with the constraint established by the Validator and the new values being set by the application code. The validators are selected based on the names of constraint attributes. For example the following will throw an error because the method Validator.validation.min exists to match the Validator constraint:
-
-```
-function Person() { }
-var validator = new Validator({name: {type: 'string'}, age: {type: 'number', min: 0}});
-Person = validator.bind(Person);
-var instance = new Person();
-instance.age = -1;
-```
+JOVIAL is implemented using a Proxy. As attempts are made to modify the properties of target objects at runtime, the validation routines are called with the constraint established by the Validator and the new values being set by the application code. The validators are selected based on the names of constraint attributes. 
 
 For versions of Chrome not supporting a Proxy the browser code includes the shim https://github.com/anywhichway/chrome-proxy while the server code has a dependency and does a conditional require.
 
 # Building & Testing
 
-Building & testing is conducted using Travis, Mocha, Chai, and Istanbul. 
+Building & testing is conducted using Travis, Mocha, Chai, and Istanbul.
+
+# Notes
+
+Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the prevention of deleting required properties fails. All tests should pass in Edge and Firefox.
 
 # Updates (reverse chronological order)
+
+2016-01-22 v0.0.15 Added *.echoes*, *.satisfies* and *.validate* and latlon type. Corrected bug where *.type* did not work as documented with functions. Added more unit tests. Updated documentation.
 
 2016-01-21 v0.0.14 Updated dependency on chrome-proxy to > 0.0.8. 
 

@@ -41,10 +41,13 @@
 			});
 		}
 	}
+	var Proxy;
 	if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
 		var ProxyConstructor = require('chrome-proxy');
 		if(typeof(ProxyConstructor)==="function") {
-			var Proxy = ProxyConstructor;
+			Proxy = ProxyConstructor;
+		} else if(this.Proxy) {
+			Proxy = this.Proxy; // lift Proxy in case inside a closure
 		}
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {
@@ -249,7 +252,7 @@
 		this.exports  = Validator;
 	} else if (typeof define === 'function' && define.amd) {
 		// Publish as AMD module
-		define(function() {return Proxy;});
+		define(function() {return Validator;});
 	} else {
 		this.Validator = Validator;
 	}

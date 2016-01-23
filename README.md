@@ -211,6 +211,8 @@ Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the
 
 # Updates (reverse chronological order)
 
+2016-01-23 v0.0.14 Addressed issue where Proxy sometimes did not get loaded and lifted to global scope by Browserify.
+
 2016-01-23 v0.0.16 Cleaned-up Proxy bundling for Chrome. Corrected documentation regarding structure of ValidationError. Add non-null test for length validation.
 
 2016-01-22 v0.0.15 Added *.echoes*, *.satisfies* and *.validate* and latlon type. Corrected bug where *.type* did not work as documented with functions. Added more unit tests. Updated documentation.

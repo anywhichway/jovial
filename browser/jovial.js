@@ -66,7 +66,7 @@
 					error.errors[property].validation.transform.error = e;
 				}
 				keys.forEach(function(key) {
-					if(typeof(Validator.validation[key])==="function" && key!=="transform") {
+					if(typeof(Validator.validation[key])==="function" && key!=="transform" && (value!==undefined || key==="required")) {
 						var result = Validator.validation[key](validation[key],value);
 						if(!result) {
 							error = (error ? error : new Validator.ValidationError(target));
@@ -184,7 +184,7 @@
 			length.sort(function(a,b) { return a - b; });
 			var min = length[0];
 			var max = length[length.length-1];
-			return (value && (value.length>=min && value.length<=max) || (value.count>=min && value.count<=max));
+			return value && ((value.length>=min && value.length<=max) || (value.count>=min && value.count<=max));
 		}
 		return value && (value.length===length || value.count===length);
 	}

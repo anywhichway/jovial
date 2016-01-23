@@ -46,6 +46,8 @@ The *.bind* method returns either a new instrumented constructor or a proxy for 
 
 ## Validation Methods
 
+Note, with the exception of *.required*, validation checks are ignored if a value is *unknown*; otherwise, all checks would behave as if a value were required. However, if a value is *null*, validation checks are conducted, i.e. *null* is treated as a value whereas *unknown* is treated as the absence of a value that could theoretically pass any validation test.
+
 *\<bound object\>.validate(trap)*
 
 Once bound, an object or instance returned from a bound constructor will have a *.validate* method. Invoking *.validate()* will attempt to validate all properties. 
@@ -210,6 +212,8 @@ Building & testing is conducted using Travis, Mocha, Chai, and Istanbul.
 Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the prevention of deleting required properties fails. All tests should pass in Edge and Firefox.
 
 # Updates (reverse chronological order)
+
+2016-01-23 v0.0.19 Corrected length check on Set when value is actually unknown. Clarified the meaning of *unknown* in the documentation.
 
 2016-01-23 v0.0.18 Modified type checking to ignore unknown values.
 

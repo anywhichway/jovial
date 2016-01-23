@@ -42,9 +42,7 @@
 		}
 	}
 	if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
-		ProxyConstructor = require('chrome-proxy');
-	} else {
-		ProxyConstructor = Proxy;
+		require('chrome-proxy');
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {
 		function validate(target,property,value,proxy,skipset,skiponerror,error) { 
@@ -133,7 +131,7 @@
 			set: validate
 		};
 		if(constructorOrObject instanceof Function) {
-			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,(typeof(Proxy)!=="undefined" ? Proxy : ProxyConstructor));
+			cons = Function("cons","hndlr","prxy","return function " + name + "() { cons.apply(this,arguments); return new prxy(this,hndlr);  }")(constructorOrObject,handler,Proxy);
 			cons.prototype = Object.create(constructorOrObject.prototype);
 			cons.prototype.__kind__ = name;
 			cons.prototype.constructor = cons;
@@ -142,7 +140,7 @@
 		} else {
 			constructorOrObject.validate = validateInstance;
 		}
-		return new ProxyConstructor(constructorOrObject,handler);
+		return new Proxy(constructorOrObject,handler);
 	}
 	Validator.ValidationError = function(object) {
 		this.object = object;
@@ -180,9 +178,9 @@
 			length.sort(function(a,b) { return a - b; });
 			var min = length[0];
 			var max = length[length.length-1];
-			return (value.length>=min && value.length<=max) || (value.count>=min && value.count<=max);
+			return (value && (value.length>=min && value.length<=max) || (value.count>=min && value.count<=max));
 		}
-		return value.length===length || value.count===length;
+		return value && (value.length===length || value.count===length);
 	}
 	Validator.validation.length.onError = RangeError;
 	

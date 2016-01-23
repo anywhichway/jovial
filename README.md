@@ -73,7 +73,7 @@ instance.name = 1; // real-time per property validation will be invoked, so an t
 
 Since JOVIAL supports both real-time per property validation and batch validation,the *Validator.ValidationError* thrown by JOVIAL is actually a container for other errors and details regarding the causes, e.g.:
 
-```{object: {name:null, age:null},errors:{name: {value: 2, type: {constraint: "string", error: [TypeError]}},{age: {value: -1, min: {constraint: 0, error: [RangeError]}}}}```
+```{object: {name:null, age:null},errors:{name: {value: 2, validation: {type: {constraint: "string", error: [TypeError]}},{age: {value: -1, min: {constraint: 0, error: [RangeError]}}}}}```
 
 The *.object* key points to the target object.
 
@@ -81,9 +81,10 @@ The *.errors* key points to an object for which there will be one key for every 
 
 ```{<property>:
      {value: <invalid value>,
-     {<failed constraint name 1>: {constraint: <constraint value 1>, error: <Error 1>},
-     {<failed constraint name 2>: {constraint: <constraint value 2>, error: <Error 2>},
-     ...
+     {validation: {<failed constraint name 1>: {constraint: <constraint value 1>, error: <Error 1>},
+     	{<failed constraint name 2>: {constraint: <constraint value 2>, error: <Error 2>},
+        ...
+     }
     }````
 
 *.echoes* = string 
@@ -209,6 +210,8 @@ Building & testing is conducted using Travis, Mocha, Chai, and Istanbul.
 Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the prevention of deleting required properties fails. All tests should pass in Edge and Firefox.
 
 # Updates (reverse chronological order)
+
+2016-01-23 v0.0.16 Cleaned-up Proxy bundling for Chrome. Corrected documentation regarding structure of ValidationError. Add non-null test for length validation.
 
 2016-01-22 v0.0.15 Added *.echoes*, *.satisfies* and *.validate* and latlon type. Corrected bug where *.type* did not work as documented with functions. Added more unit tests. Updated documentation.
 

@@ -3,9 +3,9 @@ Javascript Object Validation Interception Augmentation Library.
 
 A light weight, easily extensible validation mechanism for Javascript objects that supports both batch and real-time per property validation. 
 
-You can see an intro to JOVIAL at (http://anywhichway.github.io/).
+You can see an intro to JOVIAL at http://anywhichway.github.io/.
 
-If there are Markdown issues with this README file on npmjs.org, try (https://github.com/anywhichway/jovial).
+If there are Markdown issues with this README file on npmjs.org, try https://github.com/anywhichway/jovial.
 
 Here is an example Validator:
 

@@ -31,7 +31,7 @@ Also supported are RegExp matching, soundex testing, range testing, developer su
 
 npm install jovial
 
-The index.js and package.json files are compatible with https://github.com/anywhichway/jovial so that jovial can be served directly to the browser from the node-modules/jovial directory when using node Express.
+The index.js and package.json files are compatible with https://github.com/anywhichway/node-require so that jovial can be served directly to the browser from the node-modules/jovial directory when using node Express.
 
 Browser code can also be found in the browser directory at https://github.com/anywhichway/jovial.
 

@@ -1,6 +1,6 @@
 {
   "name": "jovial",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Javascript Object Validation Interception Augmentation Library",
   "main": "index.js",
   "client": "./browser/jovial.js",
@@ -16,7 +16,9 @@
   },
   "keywords": [
     "schema",
-    "validation"
+    "validation",
+    "validate",
+    "validatejs"
   ],
   "author": "Simon Y. Blackwell <syblackwell@anywhichway.com> (http://www.github.com/anywhichway)",
   "license": "MIT",

@@ -1,13 +1,21 @@
 # JOVIAL
 Javascript Object Validation Interception Augmentation Library.
 
-A light weight, easily extensible validation mechanism for Javascript objects that supports both batch and real-time per property validation. Here is an example Validator:
+A light weight, easily extensible validation mechanism for Javascript objects that supports both batch and real-time per property validation. 
 
-```new Validator({name: {type: 'string', length: 25, required: true}, 
+You can see an intro to JOVIAL at (http://anywhichway.github.io/).
+
+If there are Markdown issues with this README file on npmjs.org, try (https://github.com/anywhichway/jovial).
+
+Here is an example Validator:
+
+```
+new Validator({name: {type: 'string', length: 25, required: true}, 
                   age: {type: 'number', min:0, max: 110},
                   gender: {in: ['male','female']},
                   ssn: {type: 'SSN'},
-                  location: {type: 'latlon'}})```
+                  location: {type: 'latlon'}})
+```
                 
 Also supported are RegExp matching, soundex testing, range testing, developer supplied functions.
 
@@ -23,7 +31,7 @@ Also supported are RegExp matching, soundex testing, range testing, developer su
 
 npm install jovial
 
-The index.js and package.json files are compatible with https://github.com/anywhichway/node-require so that joex can be served directly to the browser from the node-modules/joex directory when using node Express.
+The index.js and package.json files are compatible with https://github.com/anywhichway/jovial so that jovial can be served directly to the browser from the node-modules/jovial directory when using node Express.
 
 Browser code can also be found in the browser directory at https://github.com/anywhichway/jovial.
 
@@ -34,7 +42,9 @@ The core of JOVIAL is the Validator class. The constructor for Validator takes a
 
 The below will constrain 'name' to be a string and 'age' to be a number with a minimum value of 0 once the validator is bound to something:
 
-```var validator = new Validator({name: {type: 'string'}, age: {type: 'number', min:0}})``` 
+```
+var validator = new Validator({name: {type: 'string'}, age: {type: 'number', min:0}})
+``` 
 
 *\<validator\>.bind(constructorOrInstance,onError[,name])*
 
@@ -75,19 +85,23 @@ instance.name = 1; // real-time per property validation will be invoked, so an t
 
 Since JOVIAL supports both real-time per property validation and batch validation,the *Validator.ValidationError* thrown by JOVIAL is actually a container for other errors and details regarding the causes, e.g.:
 
-```{object: {name:null, age:null},errors:{name: {value: 2, validation: {type: {constraint: "string", error: [TypeError]}},{age: {value: -1, min: {constraint: 0, error: [RangeError]}}}}}```
+```
+{object: {name:null, age:null},errors:{name: {value: 2, validation: {type: {constraint: "string", error: [TypeError]}},{age: {value: -1, min: {constraint: 0, error: [RangeError]}}}}}
+```
 
 The *.object* key points to the target object.
 
 The *.errors* key points to an object for which there will be one key for every property that failed validation. The form is a follows:
 
-```{<property>:
+```
+{<property>:
      {value: <invalid value>,
      {validation: {<failed constraint name 1>: {constraint: <constraint value 1>, error: <Error 1>},
      	{<failed constraint name 2>: {constraint: <constraint value 2>, error: <Error 2>},
         ...
      }
-    }````
+    }
+````
 
 *.echoes* = string 
 
@@ -149,7 +163,9 @@ If you would like additional validation methods, then post an issue to GitHub wi
 
 The developer supplied function takes the target value to transform and returns a replacement prior to setting it on the underlying object. The below will ensure all names are strings:
 
-```{name: {transform: function(v) { return v+"";}}```
+```
+{name: {transform: function(v) { return v+"";}}
+```
 
 The transformation occurs before any validation.
 
@@ -212,6 +228,8 @@ Building & testing is conducted using Travis, Mocha, Chai, and Istanbul.
 Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the prevention of deleting required properties fails. All tests should pass in Edge and Firefox.
 
 # Updates (reverse chronological order)
+
+2016-01-23 v0.0.20 Attempting to fix Markdown issues on npmjs.org that do not manifest on GitHub. No code changes. Sure wish there was a way to push a new README to npmjs.org without a version increment!
 
 2016-01-23 v0.0.19 Corrected length check on Set when value is actually unknown. Clarified the meaning of *unknown* in the documentation.
 

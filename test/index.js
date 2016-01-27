@@ -106,7 +106,7 @@ describe('Validator ', function() {
 	expect(result).to.be.an.instanceOf(Error);
 	expect(result.errors.stringProperty.validation.echoes.error).to.be.an.instanceOf(RangeError);
    });
-   it('should match an SSN using match ', function() {
+   it('should match an SSN using match using RegExp ', function() {
 	 var constraint = {stringProperty: {matches: /^\d{3}-\d{2}-\d{4}$/}};
 	 var validator = new Validator(constraint);
 	 var constructor = validator.bind(TestObject,null,"TestObject");
@@ -114,7 +114,7 @@ describe('Validator ', function() {
 	 instance.stringProperty = "555-55-5555";
 	 expect(instance.stringProperty).to.equal("555-55-5555");
    });
-   it('should throw a RangeError for a non-SSN match ', function() {
+   it('should throw a RangeError for a non-SSN match RegExp ', function() {
 	 var constraint = {stringProperty: {matches: /^\d{3}-\d{2}-\d{4}$/}};
 	 var validator = new Validator(constraint);
 	 var constructor = validator.bind(TestObject,null,"TestObject");
@@ -270,7 +270,28 @@ describe('Validator ', function() {
 				expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
 			});
 	  	});
-	  
+	  	it('should support email ', function() {
+			var constraint = {stringProperty: {type: "email"}};
+			var validator = new Validator(constraint);
+			var constructor = validator.bind(TestObject,null,"TestObject");
+			var instance = new constructor();
+			instance.stringProperty = "test@anywhichway.com";
+			expect(instance.stringProperty).to.equal("test@anywhichway.com");
+		  });
+		it('should throw TypeError if value is not email ', function() {
+			var constraint = {stringProperty: {type: "email"}};
+			var validator = new Validator(constraint);
+			var constructor = validator.bind(TestObject,null,"TestObject");
+			var instance = new constructor();
+			var result;
+			try {
+				instance.stringProperty = "a";
+			} catch(err) {
+				result = err;
+			}
+			expect(result).to.be.an.instanceOf(Error);
+			expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
+		  });
 	  describe('latlon type ', function() {
 			var constraint = {stringProperty: {type: "latlon"}};
 			var validator = new Validator(constraint);

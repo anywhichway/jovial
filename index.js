@@ -214,35 +214,37 @@
 	Validator.validation.satisfies.onError = RangeError;
 	
 	Validator.validation.type = function(type,value) {
-		var tel = {
-				us: /^[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}$/
-		};
 		if(value===undefined || typeof(value)===type) {
 			return true;
 		}
 		if(typeof(type)==="function") {
 			return value instanceof type;
 		}
-		if(type==="SSN") {
-			return /^\d{3}-\d{2}-\d{4}$/.test(value);
-		}
-		if(type==="latlon") {
-			// David Jacobs via http://www.regexlib.com/
-			return /(-?(90[ :°d]*00[ :\'\'m]*00(\.0+)?|[0-8][0-9][ :°d]*[0-5][0-9][ :\'\'m]*[0-5][0-9](\.\d+)?)[ :\?\"s]*(N|n|S|s)?)[ ,]*(-?(180[ :°d]*00[ :\'\'m]*00(\.0+)?|(1[0-7][0-9]|0[0-9][0-9])[ :°d]*[0-5][0-9][ :\'\'m]*[0-5][0-9](\.\d+)?)[ :\?\"s]*(E|e|W|w)?)/.test(value);
-		}
-		if(type.indexOf("tel")===0) {
-			var split = type.split(".");
-			split.shift();
-			if(split.length===0) {
-				split.push("us");
+		if(Validator.type[type]) {
+			if(Validator.type[type] instanceof Object && !(Validator.type[type] instanceof RegExp)) {
+				return Validator.type[type].default.test(value);
 			}
-			return split.some(function(country) {
-				if(tel[country]) {
-					return tel[country].test(value);
+			return Validator.type[type].test(value);
+		}
+		if(type.indexOf(".")===0) {
+			var split = type.split(".");
+			type = split.shift();
+			return Validator.type[type] instanceof Object && split.some(function(subkey) {
+				if(Validator.type[type][subkey]) {
+					return Validator.type[type][subkey].test(value);
 				}
 			});
 		}
 		return false;
+	}
+	Validator.type = {
+		tel: {
+			default: /^[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}$/,
+			us: /^[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}$/
+		},
+		email: /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/,
+		SSN: /^\d{3}-\d{2}-\d{4}$/,
+		latlon: /(-?(90[ :°d]*00[ :\'\'m]*00(\.0+)?|[0-8][0-9][ :°d]*[0-5][0-9][ :\'\'m]*[0-5][0-9](\.\d+)?)[ :\?\"s]*(N|n|S|s)?)[ ,]*(-?(180[ :°d]*00[ :\'\'m]*00(\.0+)?|(1[0-7][0-9]|0[0-9][0-9])[ :°d]*[0-5][0-9][ :\'\'m]*[0-5][0-9](\.\d+)?)[ :\?\"s]*(E|e|W|w)?)/
 	}
 	Validator.validation.type.onError = TypeError;
 	

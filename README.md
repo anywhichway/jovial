@@ -138,9 +138,13 @@ Supports length checking on values with a length or count property, typically st
 
 The developer supplied function should take a single argument and return *true* if the argument is a valid value and *false* if not.
 
-*.type* = "string" | "boolean" | "function" | "object" | "SSN" | "tel" | "latlon" | function
+*.type* = "string" | "boolean" | "function" | "object" | "email" | "SSN" | "tel" | "latlon" | function
 
 If a function is provided as a type, then the function is assumed to be a constructor and an *instanceof* check is done. If a target value is *unknown* then the type is assumed to match, otherwise type checking would behave like *.required*.
+
+####email
+
+Email validation should be considered just a first pass of checking for valid email if you are using this for account registration. Always send a confirmation email to to users. There are plenty of cases in which a syntactically valid email is just nonsense.
 
 ####SSN 
 
@@ -178,7 +182,28 @@ The transformation occurs before any validation.
 
 # Extending JOVIAL
 
-Extending JOVIAL is as simple as adding methods to the Validator class by the same name as the constraint desired and providing an optional error type. For example, the constraints 'between' and 'min' and 'max' are implemented as:
+JOVAIL can be extended by two means:
+
+1. Adding RegExp patterns to extend the `Validator.type` property using keys by the same name at the type you wish to add. If there are sub-types, you can use dot notation and sub-keys in the extension. If you do this, be sure to provide a default. The current type validations are created this way:
+
+```
+Validator.type = {
+		tel: {
+			default: /^[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}$/,
+			us: /^[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}$/
+		}, // will validate type='tel' and type='tel.us'
+		SSN: /^\d{3}-\d{2}-\d{4}$/
+		...
+	}
+```
+
+You can add patterns from outside the source code through direct assignment, e.g.
+
+```
+Validator.type.<type name> = RegExp;
+```
+
+2. Adding methods to the Validator class by the same name as the constraint desired and providing an optional error type. For example, the constraints 'between' and 'min' and 'max' are implemented as:
 
 ```
 Validator.validation.between = function(between,value) {
@@ -241,6 +266,8 @@ Building & testing is conducted using Travis, Mocha, Chai, and Istanbul.
 Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the prevention of deleting required properties fails. All tests should pass in Edge and Firefox.
 
 # Updates (reverse chronological order)
+
+2016-01-27 v0.0.21 Added email validation and made type checking extensible.
 
 2016-01-23 v0.0.20 Attempting to fix Markdown issues on npmjs.org that do not manifest on GitHub. No code changes. Sure wish there was a way to push a new README to npmjs.org without a version increment!
 

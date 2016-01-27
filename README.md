@@ -1,7 +1,7 @@
 # JOVIAL
-Javascript Object Validation Interception Augmentation Library.
+JavaScript Object Validation Interception Augmentation Library.
 
-A light weight, easily extensible validation mechanism for Javascript objects that supports both batch and real-time per property validation. 
+A light weight, easily extensible validation mechanism for JavaScript objects that supports both batch and real-time per property validation. 
 
 You can see an intro to JOVIAL at http://anywhichway.github.io/.
 
@@ -69,17 +69,20 @@ For example, the following will throw errors:
 ```
 function Person() { p1.name = null, p1.age = null }
 
-var validator = new Validator({name: {type: 'string'}, age: {type: 'number'}});
+var validator = new Validator({name: 
+                                 {type: 'string'},
+                               age: 
+                                 {type: 'number'}});
 
 var p1 = new Person();
 p1.name = 2; // intentionally incorrect type for example
 p1.age = "20"; 
-p1 = validator.bind(p1); // binds validator to object so it will have validation
+p1 = validator.bind(p1); // binds validator to object so it validates
 p1.validate(); // performs batch validation, an error will be thrown here
 
-Person = validator.bind(Person); // binds validator to constructor so all instances have validation
+Person = validator.bind(Person); // binds validator to constructor so all instances validate
 var instance = new Person();
-instance.name = 1; // real-time per property validation will be invoked, so an type error will be thrown here
+instance.name = 1; // real-time per property validation invoked, so an type error is thrown
 
 ```
 
@@ -96,8 +99,12 @@ The *.errors* key points to an object for which there will be one key for every 
 ```
 {<property>:
      {value: <invalid value>,
-     {validation: {<failed constraint name 1>: {constraint: <constraint value 1>, error: <Error 1>},
-     	{<failed constraint name 2>: {constraint: <constraint value 2>, error: <Error 2>},
+     {validation:{<failed constraint name 1>: 
+     					{constraint: <constraint value 1>, 
+     								error: <Error 1>},
+     				{<failed constraint name 2>: 
+     					{constraint: <constraint value 2>, 
+     								error: <Error 2>},
         ...
      }
     }
@@ -197,20 +204,26 @@ Using the above, we can extend the Person example as follows:
 
 ```
 function Person() { }
-var validator = new Validator({name: {type: 'string'}, age:{type: 'number', min: 0, max: 110}}});
+var validator = new Validator({name: 
+										{type: 'string'}, 
+									age:
+										{type: 'number', min: 0, max: 110}}});
 Person = validator.bind(Person);
 var instance = new Person();
-instance.age = 120; // throws a RangeError {object: {},errors:{age: {value: 120, max: {constraint: 110, error: [RangeError]}}}}
+instance.age = 120; // throws {object:...,errors:{age:{value:120,max:{constraint:110,error:[RangeError]}}}}
 ```
 
 or
 
 ```
 function Person() { }
-var validator = new Validator({name: {type: 'string'}, age:{type: 'number', between: [0,110]}});
+var validator = new Validator({name: 
+										{type: 'string'}, 
+									age:
+										{type: 'number', between: [0,110]}});
 Person = validator.bind(Person);
 var instance = new Person();
-instance.age = 120; // throws a RangeError {object: {},errors:{age: {value: 120, between: {constraint: [0,110], error: [RangeError]}}}}
+instance.age = 120; // throws {object:...,errors:{age:{value:120,between:{constraint:[0,110],error:[RangeError]}}}}
 ```
 
 # Implementation

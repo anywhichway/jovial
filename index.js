@@ -245,7 +245,7 @@
 			}
 			return Validator.type[type].test(value);
 		}
-		if(type.indexOf(".")===0) {
+		if(type.indexOf(".")>=0) {
 			var split = type.split(".");
 			type = split.shift();
 			return Validator.type[type] instanceof Object && split.some(function(subkey) {

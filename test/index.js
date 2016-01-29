@@ -291,6 +291,14 @@ describe('Validator ', function() {
 				expect(result).to.be.an.instanceOf(Error);
 				expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
 			});
+			it('should support dot notation ', function() {
+				var constraint = {stringProperty: {type: "tel.us"}};
+				var validator = new Validator(constraint);
+				var constructor = validator.bind(TestObject,null,"TestObject");
+				var instance = new constructor();
+				instance.stringProperty = "800-555-1212";
+				expect(instance.stringProperty).to.equal("800-555-1212");
+			});
 	  	});
 	  	it('should support email ', function() {
 			var constraint = {stringProperty: {type: "email"}};

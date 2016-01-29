@@ -275,7 +275,7 @@ Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the
 
 # Updates (reverse chronological order)
 
-2016-01-27 v0.0.22 Added default values and write once support.
+2016-01-27 v0.0.22 Added default values and write once support. Fixed bug with dot notation in subtypes (they did not work). Added the unit test!
 
 2016-01-27 v0.0.21 Added email validation and made type checking extensible.
 

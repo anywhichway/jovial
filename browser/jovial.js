@@ -54,6 +54,7 @@
 			var validation = validator[property], keys, error;
 			if(validation) {
 				keys = Object.keys(validation);
+				value = (validation.default!==undefined && (value===undefined || value===null) ? validation.default : value);
 				try {
 					value = (validation.transform ? Validator.validation.transform(validation.transform,value) : value);
 				} catch(e) {
@@ -64,8 +65,19 @@
 					error.errors[property].validation.transform = {constraint: validation.transform};
 					error.errors[property].validation.transform.error = e;
 				}
+				if(validation.writeonce && target[property]!==value && target[property]!==undefined) {
+					error = (error ? error : new Validator.ValidationError(target));
+					error.errors[property] = (error.errors[property] ? error.errors[property] : {});
+					error.errors[property].value = (value===undefined ? null : value);
+					error.errors[property].validation = (error.errors[property].validation ? error.errors[property].validation : {});
+					error.errors[property].validation.writeonce = {constraint: validation.writeonce};
+					var msg = property + ":" + (typeof(value)==="string" ? "\"" + value + "\"" : (value instanceof Object ? JSON.stringify(value) : value)) + " failed validation {\"writeonce\":" + JSON.stringify(error.errors[property].validation.writeonce) + "}";
+					Validator.validation.type.onError = RangeError;
+					var propertyerror = new (Validator.validation.writeonce.onError ? Validator.validation.writeonce.onError : Error)(msg);
+					error.errors[property].validation.writeonce.error = propertyerror;
+				}
 				keys.forEach(function(key) {
-					if(typeof(Validator.validation[key])==="function" && key!=="transform" && (value!==undefined || key==="required")) {
+					if(typeof(Validator.validation[key])==="function" && key!=="transform" && key!=="default" && (value!==undefined || key==="required")) {
 						var result = Validator.validation[key](validation[key],value);
 						if(!result) {
 							error = (error ? error : new Validator.ValidationError(target));
@@ -159,6 +171,13 @@
 		return f(value);
 	}
 	Validator.validation.transform.onError = TypeError;
+	
+	Validator.validation.writeonce = {};
+	Validator.validation.writeonce.onError = RangeError;
+	
+	Validator.validation.default = {};
+	Validator.validation.default.onError = RangeError
+	
 	
 	Validator.validation.between = function(between,value) {
 		between.sort(function(a,b) { return a - b; });

@@ -5,8 +5,6 @@ A light weight, easily extensible validation mechanism for JavaScript objects th
 
 You can see an intro to JOVIAL at http://anywhichway.github.io/.
 
-If there are Markdown issues with this README file on npmjs.org, try https://github.com/anywhichway/jovial.
-
 Here is an example Validator:
 
 ```
@@ -18,6 +16,8 @@ new Validator({name: {type: 'string', length: 25, required: true},
 ```
                 
 Also supported are RegExp matching, soundex testing, range testing, developer supplied functions.
+
+**NEW** in this release v0.0.22: default values and writeonce
 
 [![Build Status](https://travis-ci.org/anywhichway/jovial.svg)](https://travis-ci.org/anywhichway/jovial)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/42cd44eee8794c22aa7a4f780abd2d0b)](https://www.codacy.com/app/syblackwell/jovial)
@@ -168,7 +168,15 @@ Non-Matches
 
 If you would like additional validation methods, then post an issue to GitHub with the code based on the instructions in **Extending JOVIAL** below.
 
+*.writeonce* = true | false
+
+Throws a RangeError if an attempt is made to set a value when once already exists, except if the value is the same.
+
 ## Augmentation Methods
+
+*.default* = any
+
+Sets a default value if an attempt is made to set a value to `null` or `undefined`. The default is set prior to calling a transformation, if a transformation exists.
 
 *.transform* = function(any)
 
@@ -266,6 +274,8 @@ Building & testing is conducted using Travis, Mocha, Chai, and Istanbul.
 Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the prevention of deleting required properties fails. All tests should pass in Edge and Firefox.
 
 # Updates (reverse chronological order)
+
+2016-01-27 v0.0.22 Added default values and write once support.
 
 2016-01-27 v0.0.21 Added email validation and made type checking extensible.
 

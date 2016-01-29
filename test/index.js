@@ -70,7 +70,29 @@ describe('Validator ', function() {
 	 instance.stringProperty = "a";
 	 expect(instance.stringProperty).to.equal("ab");
 	 });
-   it('should throw a RangeError for non-transforming value ', function() {
+   it('should support default values ', function() {
+		 var constraint = {stringProperty: {default: "a string"}};
+		 var validator = new Validator(constraint);
+		 var constructor = validator.bind(TestObject,null,"TestObject");
+		 var instance = new constructor();
+		 instance.stringProperty = null;
+		 expect(instance.stringProperty).to.equal("a string");
+	});
+   it('should throw RangeError for writeonce overwrite ', function() {
+		var constraint = {stringProperty: {writeonce: true}};
+		var validator = new Validator(constraint);
+		var constructor = validator.bind(TestObject,null,"TestObject");
+		var instance = new constructor();
+		var result;
+		try {
+			instance.stringProperty = "b";
+		} catch(err) {
+			result = err;
+		}
+		expect(result).to.be.an.instanceOf(Error);
+		expect(result.errors.stringProperty.validation.writeonce.error).to.be.an.instanceOf(RangeError);
+	 });
+   it('should throw a Error for non-transforming value ', function() {
 	 var constraint = {stringProperty: {transform: function(v) { throw new Error("can't transform"); }}};
 	 var validator = new Validator(constraint);
 	 var constructor = validator.bind(TestObject,null,"TestObject");

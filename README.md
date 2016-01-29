@@ -94,7 +94,7 @@ Since JOVIAL supports both real-time per property validation and batch validatio
 
 The *.object* key points to the target object.
 
-The *.errors* key points to an object for which there will be one key for every property that failed validation. The form is a follows:
+The *.errors* key points to an object for which there will be one key for every property that failed validation. The form is as follows:
 
 ```
 {<property>:
@@ -124,7 +124,7 @@ Ensures a value matches the provided regular expression.
 
 *.required* = true | false
 
-Throws an error is a property is missing or there is an attempt to delete it. Note, the deletion attempt must be done in a context that allows the error to bubble, so it may fail to work in some asych code situations. For example chrome-proxy uses Object.observe to manage property deletion. Objects proxied through chrome-proxy will not get proper validation for this constraint.
+Throws an error if a property is missing or there is an attempt to delete it. Note, the deletion attempt must be done in a context that allows the error to bubble, so it may fail to work in some asych code situations. For example chrome-proxy uses Object.observe to manage property deletion. Objects proxied through chrome-proxy will not get proper validation for this constraint.
 
 *.in* = Array 
 

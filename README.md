@@ -170,7 +170,7 @@ If you would like additional validation methods, then post an issue to GitHub wi
 
 *.writeonce* = true | false
 
-Throws a RangeError if an attempt is made to set a value when once already exists, except if the value is the same.
+Throws a RangeError if an attempt is made to set a value when one already exists, except if the value is the same.
 
 ## Augmentation Methods
 
@@ -275,7 +275,7 @@ Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the
 
 # Updates (reverse chronological order)
 
-2016-01-27 v0.0.22 Added default values and write once support. Fixed bug with dot notation in subtypes (they did not work). Added the unit test!
+2016-01-28 v0.0.22 Added default values and write once support. Fixed bug with dot notation in subtypes (they did not work). Added the unit test!
 
 2016-01-27 v0.0.21 Added email validation and made type checking extensible.
 

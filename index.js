@@ -50,7 +50,7 @@
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {
 		function validate(target,property,value,proxy,skipset,skiponerror,error) { 
-			var validation = validator[property], keys, error;
+			var validation = validator[property], keys;
 			if(validation) {
 				keys = Object.keys(validation);
 				value = (validation.default!==undefined && (value===undefined || value===null) ? validation.default : value);

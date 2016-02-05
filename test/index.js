@@ -322,6 +322,82 @@ describe('Validator ', function() {
 			expect(result).to.be.an.instanceOf(Error);
 			expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
 		  });
+	  describe('CC type', function() {
+		  var constraint = {stringProperty: {type: "CC"}};
+			var validator = new Validator(constraint);
+			var constructor = validator.bind(TestObject,null,"TestObject");
+			var instance = new constructor();
+			it('should support  5431-1111-1111-1111 ', function() {
+				instance.stringProperty = "5431-1111-1111-1111";
+				expect(instance.stringProperty).to.equal("5431-1111-1111-1111");
+			});
+			it('should throw TypeError if value is not a CC ', function() {
+				var constraint = {stringProperty: {type: "CC"}};
+				var validator = new Validator(constraint);
+				var constructor = validator.bind(TestObject,null,"TestObject");
+				var instance = new constructor();
+				var result;
+				try {
+					instance.stringProperty = "a";
+				} catch(err) {
+					result = err;
+				}
+				expect(result).to.be.an.instanceOf(Error);
+				expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
+			});
+	  });
+	  describe('IP type', function() {
+		  var constraint = {stringProperty: {type: "IP"}};
+			var validator = new Validator(constraint);
+			var constructor = validator.bind(TestObject,null,"TestObject");
+			var instance = new constructor();
+			it('should support  127.0.0.1 ', function() {
+				instance.stringProperty = "127.0.0.1";
+				expect(instance.stringProperty).to.equal("127.0.0.1");
+			});
+			it('should throw TypeError if value is not a IP ', function() {
+				var constraint = {stringProperty: {type: "IP"}};
+				var validator = new Validator(constraint);
+				var constructor = validator.bind(TestObject,null,"TestObject");
+				var instance = new constructor();
+				var result;
+				try {
+					instance.stringProperty = "a";
+				} catch(err) {
+					result = err;
+				}
+				expect(result).to.be.an.instanceOf(Error);
+				expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
+			});
+	  });
+	  describe('ISBN type', function() {
+		  var constraint = {stringProperty: {type: "ISBN"}};
+			var validator = new Validator(constraint);
+			var constructor = validator.bind(TestObject,null,"TestObject");
+			var instance = new constructor();
+			it('should support 1234123412  ', function() {
+				instance.stringProperty = "1234123412";
+				expect(instance.stringProperty).to.equal("1234123412");
+			});
+			it('should support 1234123412  ', function() {
+				instance.stringProperty = "ISBN 1-56389-668-0";
+				expect(instance.stringProperty).to.equal("ISBN 1-56389-668-0");
+			});
+			it('should throw TypeError if value is not a ISBN ', function() {
+				var constraint = {stringProperty: {type: "ISBN"}};
+				var validator = new Validator(constraint);
+				var constructor = validator.bind(TestObject,null,"TestObject");
+				var instance = new constructor();
+				var result;
+				try {
+					instance.stringProperty = "a";
+				} catch(err) {
+					result = err;
+				}
+				expect(result).to.be.an.instanceOf(Error);
+				expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
+			});
+	  });
 	  describe('latlon type ', function() {
 			var constraint = {stringProperty: {type: "latlon"}};
 			var validator = new Validator(constraint);

@@ -38,7 +38,7 @@ Browser code can also be found in the browser directory at https://github.com/an
 
 # Documentation
 
-See the GitHub Wiki: https://github.com/anywhichway/jovial/wiki
+See the GitHub Wiki: https://github.com/anywhichway/jovial/wiki/1.-Usage
 
 # Building & Testing
 

@@ -1,6 +1,16 @@
 # JOVIAL
 JavaScript Object Validation Interception Augmentation Library.
 
+[![Build Status](https://travis-ci.org/anywhichway/jovial.svg)](https://travis-ci.org/anywhichway/jovial)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/42cd44eee8794c22aa7a4f780abd2d0b)](https://www.codacy.com/app/syblackwell/jovial)
+[![Code Climate](https://codeclimate.com/github/anywhichway/jovial/badges/gpa.svg)](https://codeclimate.com/github/anywhichway/jovial)
+[![Test Coverage](https://codeclimate.com/github/anywhichway/jovial/badges/coverage.svg)](https://codeclimate.com/github/anywhichway/jovial/coverage)
+[![Issue Count](https://codeclimate.com/github/anywhichway/jovial/badges/issue_count.svg)](https://codeclimate.com/github/anywhichway/jovial)
+
+
+[![NPM](https://nodei.co/npm/jovial.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/jovial/)
+
+
 A light weight, easily extensible validation mechanism for JavaScript objects that supports both batch and real-time per property validation. 
 
 You can see an intro to JOVIAL at http://anywhichway.github.io/.
@@ -18,15 +28,6 @@ new Validator({name: {type: 'string', length: 25, required: true},
 Also supported are RegExp matching, soundex testing, range testing, developer supplied functions.
 
 **NEW** in this release v0.0.24: Luhn algorith for CC validation and more ways to extend JOVIAL type checking.
-
-[![Build Status](https://travis-ci.org/anywhichway/jovial.svg)](https://travis-ci.org/anywhichway/jovial)
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/42cd44eee8794c22aa7a4f780abd2d0b)](https://www.codacy.com/app/syblackwell/jovial)
-[![Code Climate](https://codeclimate.com/github/anywhichway/jovial/badges/gpa.svg)](https://codeclimate.com/github/anywhichway/jovial)
-[![Test Coverage](https://codeclimate.com/github/anywhichway/jovial/badges/coverage.svg)](https://codeclimate.com/github/anywhichway/jovial/coverage)
-[![Issue Count](https://codeclimate.com/github/anywhichway/jovial/badges/issue_count.svg)](https://codeclimate.com/github/anywhichway/jovial)
-
-
-[![NPM](https://nodei.co/npm/jovial.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/jovial/)
 
 # Install
 

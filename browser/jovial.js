@@ -5,6 +5,29 @@
 //     MIT License - http://opensource.org/licenses/mit-license.php
 (function() {
 	"use strict";
+	// valid_credit_card from https://gist.github.com/DiegoSalazar/4075533#file-validate_credit_card-js
+	function valid_credit_card(value) {
+	  // accept only digits, dashes or spaces
+		if (/[^0-9-\s]+/.test(value)) return false;
+
+		// The Luhn Algorithm. It's so pretty.
+		var nCheck = 0, nDigit = 0, bEven = false;
+		value = value.replace(/\D/g, "");
+
+		for (var n = value.length - 1; n >= 0; n--) {
+			var cDigit = value.charAt(n),
+				  nDigit = parseInt(cDigit, 10);
+
+			if (bEven) {
+				if ((nDigit *= 2) > 9) nDigit -= 9;
+			}
+
+			nCheck += nDigit;
+			bEven = !bEven;
+		}
+
+		return (nCheck % 10) == 0;
+	}
 	// soundex from https://gist.github.com/shawndumas/1262659
 	function soundex(s) {
 	    var a = s.toLowerCase().split(''),
@@ -241,7 +264,9 @@
 			return value instanceof type;
 		}
 		if(Validator.type[type]) {
-			if(Validator.type[type] instanceof Object && !(Validator.type[type] instanceof RegExp)) {
+			if(typeof(Validator.type[type])==="function") {
+				return Validator.type[type](value);
+			} else if(typeof(Validator.type[type])==="object" && !(Validator.type[type] instanceof RegExp)) {
 				return Validator.type[type].default.test(value);
 			}
 			return Validator.type[type].test(value);
@@ -258,7 +283,8 @@
 		return false;
 	}
 	Validator.type = {
-		CC: /^3(?:[47]\d([ -]?)\d{4}(?:\1\d{4}){2}|0[0-5]\d{11}|[68]\d{12})$|^4(?:\d\d\d)?([ -]?)\d{4}(?:\2\d{4}){2}$|^6011([ -]?)\d{4}(?:\3\d{4}){2}$|^5[1-5]\d\d([ -]?)\d{4}(?:\4\d{4}){2}$|^2014\d{11}$|^2149\d{11}$|^2131\d{11}$|^1800\d{11}$|^3\d{15}$/, //http://regexlib.com, Conrorozo
+		//CC: /^3(?:[47]\d([ -]?)\d{4}(?:\1\d{4}){2}|0[0-5]\d{11}|[68]\d{12})$|^4(?:\d\d\d)?([ -]?)\d{4}(?:\2\d{4}){2}$|^6011([ -]?)\d{4}(?:\3\d{4}){2}$|^5[1-5]\d\d([ -]?)\d{4}(?:\4\d{4}){2}$|^2014\d{11}$|^2149\d{11}$|^2131\d{11}$|^1800\d{11}$|^3\d{15}$/, //http://regexlib.com, Conrorozo
+		CC: valid_credit_card,
 		email: /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/,
 		IP: /^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$/, //http://regexlib.com, Duthie
 		ISBN: /(ISBN[-]*(1[03])*[ ]*(: ){0,1})*(([0-9Xx][- ]*){13}|([0-9Xx][- ]*){10})/, // http://regexlib.com/ Churk

@@ -323,6 +323,8 @@ describe('Validator ', function() {
 			expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
 		  });
 	  describe('CC type', function() {
+		  // is  6372178847694560
+		  // is not 6372178847694506
 		  var constraint = {stringProperty: {type: "CC"}};
 			var validator = new Validator(constraint);
 			var constructor = validator.bind(TestObject,null,"TestObject");
@@ -331,7 +333,11 @@ describe('Validator ', function() {
 				instance.stringProperty = "5431-1111-1111-1111";
 				expect(instance.stringProperty).to.equal("5431-1111-1111-1111");
 			});
-			it('should throw TypeError if value is not a CC ', function() {
+			it('should support 6372178847694560 ', function() {
+				instance.stringProperty = "6372178847694560";
+				expect(instance.stringProperty).to.equal("6372178847694560");
+			});
+			it('should throw TypeError if value is not anything like a CC ', function() {
 				var constraint = {stringProperty: {type: "CC"}};
 				var validator = new Validator(constraint);
 				var constructor = validator.bind(TestObject,null,"TestObject");
@@ -339,6 +345,20 @@ describe('Validator ', function() {
 				var result;
 				try {
 					instance.stringProperty = "a";
+				} catch(err) {
+					result = err;
+				}
+				expect(result).to.be.an.instanceOf(Error);
+				expect(result.errors.stringProperty.validation.type.error).to.be.an.instanceOf(TypeError);
+			});
+			it('should throw TypeError if value looks like but is not a CC ', function() {
+				var constraint = {stringProperty: {type: "CC"}};
+				var validator = new Validator(constraint);
+				var constructor = validator.bind(TestObject,null,"TestObject");
+				var instance = new constructor();
+				var result;
+				try {
+					instance.stringProperty = "6372178847694506";
 				} catch(err) {
 					result = err;
 				}

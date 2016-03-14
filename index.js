@@ -297,10 +297,10 @@ if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
 	
 	if (this.exports) {
 		this.exports  = Validator;
-	} else if (typeof define === 'function' && define.amd) {
+	} else if (typeof define === "function" && define.amd) {
 		// Publish as AMD module
 		define(function() {return Validator;});
 	} else {
 		this.Validator = Validator;
 	}
-}).call((typeof(window)!=='undefined' ? window : (typeof(module)!=='undefined' ? module : null)));
+}).call((typeof(window)!=="undefined" ? window : (typeof(module)!=="undefined" ? module : null)));

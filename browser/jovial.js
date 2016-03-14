@@ -3,6 +3,15 @@
 //
 //     Copyright (c) 2015, 2016 Simon Y. Blackwell, AnyWhichWay
 //     MIT License - http://opensource.org/licenses/mit-license.php
+var Proxy, ProxyConstructor;
+if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
+	ProxyConstructor = require('chrome-proxy');
+	if(typeof(ProxyConstructor)==="function") {
+		Proxy = ProxyConstructor;
+	} else if(this.Proxy) {
+		Proxy = this.Proxy; // lift Proxy in case inside a closure
+	}
+}
 (function() {
 	"use strict";
 	// valid_credit_card from https://gist.github.com/DiegoSalazar/4075533#file-validate_credit_card-js
@@ -15,8 +24,8 @@
 		value = value.replace(/\D/g, "");
 
 		for (var n = value.length - 1; n >= 0; n--) {
-			var cDigit = value.charAt(n),
-				  nDigit = parseInt(cDigit, 10);
+			var cDigit = value.charAt(n);
+			nDigit = parseInt(cDigit, 10);
 
 			if (bEven) {
 				if ((nDigit *= 2) > 9) nDigit -= 9;
@@ -26,7 +35,7 @@
 			bEven = !bEven;
 		}
 
-		return (nCheck % 10) == 0;
+		return (nCheck % 10) === 0;
 	}
 	// soundex from https://gist.github.com/shawndumas/1262659
 	function soundex(s) {
@@ -61,15 +70,6 @@
 				me[key] = config[key];
 				me[key].name = key;
 			});
-		}
-	}
-	var Proxy, ProxyConstructor;
-	if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
-		ProxyConstructor = require('chrome-proxy');
-		if(typeof(ProxyConstructor)==="function") {
-			Proxy = ProxyConstructor;
-		} else if(this.Proxy) {
-			Proxy = this.Proxy; // lift Proxy in case inside a closure
 		}
 	}
 	Validator.prototype.bind = function(constructorOrObject,onerror,name) {
@@ -201,7 +201,6 @@
 	Validator.validation.default = {};
 	Validator.validation.default.onError = RangeError
 	
-	
 	Validator.validation.between = function(between,value) {
 		between.sort(function(a,b) { return a - b; });
 		var min = between[0];
@@ -299,13 +298,13 @@
 	
 	if (this.exports) {
 		this.exports  = Validator;
-	} else if (typeof define === 'function' && define.amd) {
+	} else if (typeof define === "function" && define.amd) {
 		// Publish as AMD module
 		define(function() {return Validator;});
 	} else {
 		this.Validator = Validator;
 	}
-}).call((typeof(window)!=='undefined' ? window : (typeof(module)!=='undefined' ? module : null)));
+}).call((typeof(window)!=="undefined" ? window : (typeof(module)!=="undefined" ? module : null)));
 },{"chrome-proxy":2}],2:[function(require,module,exports){
 (function() {
 	//"use strict"; DO NOT ENABLE STRICT

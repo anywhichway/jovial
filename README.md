@@ -27,11 +27,6 @@ new Validator({name: {type: 'string', length: 25, required: true},
                 
 Also supported are RegExp matching, soundex testing, range testing, developer supplied functions.
 
-**NEW** in this release v0.0.24: Luhn algorithm for CC validation and more ways to extend JOVIAL type checking.
-
-Note: The Codacy and Code Climate scores have dropped with this release due to some re-factoring that increased the complexity of internals. We are working to
-bring this back down. However, it the short term, since we mainatin the code it should not impact your use.
-
 # Install
 
 npm install jovial
@@ -53,6 +48,8 @@ Building & testing is conducted using Travis, Mocha, Chai, and Istanbul.
 Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the prevention of deleting required properties fails. All tests should pass in Edge and Firefox.
 
 # Updates (reverse chronological order)
+
+2016-03-03-04 v0.0.25 internals complexity reduction and README update, no functional changes
 
 2016-03-03-04 v0.0.24 credit card validation modified from RegExp to Luhn algorithm, ability to enhance types using functions added.
 

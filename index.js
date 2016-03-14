@@ -16,7 +16,7 @@ if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
 	// valid_credit_card from https://gist.github.com/DiegoSalazar/4075533#file-validate_credit_card-js
 	function valid_credit_card(value) {
 	  // accept only digits, dashes or spaces
-		if (/[^0-9-\s]+/.test(value)) return false;
+		if (/[^0-9-\s]+/.test(value)) { return false; }
 
 		// The Luhn Algorithm. It's so pretty.
 		var nCheck = 0, nDigit = 0, bEven = false;
@@ -27,7 +27,7 @@ if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
 			nDigit = parseInt(cDigit, 10);
 
 			if (bEven) {
-				if ((nDigit *= 2) > 9) nDigit -= 9;
+				if ((nDigit *= 2) > 9) { nDigit -= 9; }
 			}
 
 			nCheck += nDigit;

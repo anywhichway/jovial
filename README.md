@@ -49,7 +49,7 @@ Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the
 
 # Updates (reverse chronological order)
 
-2016-03-03-04 v0.0.25 internals complexity reduction and README update, no functional changes
+2016-03-03-14 v0.0.25 internals complexity reduction and README update, no functional changes
 
 2016-03-03-04 v0.0.24 credit card validation modified from RegExp to Luhn algorithm, ability to enhance types using functions added.
 

@@ -2,15 +2,10 @@
 //
 //     Copyright (c) 2015, 2016 Simon Y. Blackwell, AnyWhichWay
 //     MIT License - http://opensource.org/licenses/mit-license.php
-var Proxy, ProxyConstructor;
-if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
-	ProxyConstructor = require('chrome-proxy');
-	if(typeof(ProxyConstructor)==="function") {
-		Proxy = ProxyConstructor;
-	} else if(this.Proxy) {
-		Proxy = this.Proxy; // lift Proxy in case inside a closure
-	}
-}
+//     jovial
+//
+//     Copyright (c) 2015, 2016 Simon Y. Blackwell, AnyWhichWay
+//     MIT License - http://opensource.org/licenses/mit-license.php
 (function() {
 	"use strict";
 	// valid_credit_card from https://gist.github.com/DiegoSalazar/4075533#file-validate_credit_card-js
@@ -161,11 +156,13 @@ if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
 					return true;
 				}
 				handler.set(target,property,undefined,proxy,true);
+				return true;
 			},
 			defineProperty: function(target, property, descriptor, proxy) {
 				if(handler.set(target, property, descriptor.value, proxy, true)) {
 					Object.defineProperty(target, property, descriptor);
 				}
+				return true;
 			},
 			set: validate
 		};
@@ -294,7 +291,9 @@ if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
 		}
 	}
 	Validator.validation.type.onError = TypeError;
-	
+	if(typeof(window)!=="undefined") {
+		window.Validator = Validator;
+	}
 	if (this.exports) {
 		this.exports  = Validator;
 	} else if (typeof define === "function" && define.amd) {
@@ -303,4 +302,4 @@ if(typeof(Proxy)==="undefined"  && typeof(require)==="function") {
 	} else {
 		this.Validator = Validator;
 	}
-}).call((typeof(window)!=="undefined" ? window : (typeof(module)!=="undefined" ? module : null)));
+}).call((typeof(module)!=="undefined" ? module : (typeof(window)!=="undefined" ? window : null)));

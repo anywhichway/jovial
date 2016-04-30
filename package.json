@@ -9,7 +9,7 @@
   "scripts": {
     "test": "istanbul cover node_modules/mocha/bin/_mocha --report lcov -- -R spec",
     "browserify": "browserify index.js -o browser/jovial.js",
-    "minify": "minify browser/jovial.js",
+    "minify": "minify browser/jovial.js  > browser/jovial.min.js",
     "prepublish": "npm run browserify && npm run minify"
   },
   "repository": {
@@ -32,7 +32,9 @@
     "chai": "^3.4.1",
     "codeclimate-test-reporter": "^0.2.0",
     "istanbul": "^0.4.2",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "browserify": "^13.0.0",
+    "minify": "^2.0.8"
   },
   "dependencies": {}
 }

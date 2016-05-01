@@ -20,7 +20,7 @@
     ]
   },
   "scripts": {
-    "test": "istanbul cover node_modules/mocha/bin/_mocha --report lcov -- -R spec",
+    "test": "istanbul cover node_modules/mocha/bin/_mocha --report lcov -- -R TAP",
     "browserify": "browserify index.js -o browser/jovial.js",
     "minify": "minify browser/jovial.js  > browser/jovial.min.js",
     "prepublish": "npm run browserify && npm run minify"

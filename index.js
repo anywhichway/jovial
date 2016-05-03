@@ -56,8 +56,9 @@
 		
 		return (r + '000').slice(0, 4).toUpperCase();
 	}
-	function Validator(config) {
+	function Validator(config,limit) {
 		var me = this;
+		me.limit = limit;
 		if(config) {
 			var keys = Object.keys(config);
 			keys.forEach(function(key) {
@@ -109,6 +110,8 @@
 						}
 					}
 				});
+			} else if(validator.limit) {
+				error = new Error(property + " is not an allowed property for a " + target.constructor.name);
 			}
 			if(error) {
 				if(!skiponerror && onerror) {
@@ -174,7 +177,7 @@
 			cons.prototype.validate = validateInstance;
 			return cons;
 		} else {
-			constructorOrObject.validate = validateInstance;
+			Object.defineProperty(constructorOrObject,"validate",{enumerable:false,configurable:true,writable:true,value:validateInstance});
 		}
 		return new Proxy(constructorOrObject,handler);
 	}

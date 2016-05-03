@@ -605,6 +605,45 @@ describe('Validator ', function() {
 		expect(result).to.be.an.instanceOf(Error);
 		expect(result.errors.arrayProperty.validation.length.error).to.be.an.instanceOf(RangeError);
 	});
+	 it('should throw Error if extra property on property set check', function() {
+		 	var constraint = {stringProperty: {type: "string"}, numberProperty: {type: "number"}, booleanProperty: {type: "boolean"}};
+		 	var validator = new Validator(constraint,true);
+			var constructor = validator.bind(TestObject,null,"TestObject");
+			var instance = new constructor();
+			var result;
+			try {
+				instance.shouldFail = true;
+			} catch(err) {
+				result = err;
+			}
+			expect(result).to.be.an.instanceOf(Error);
+		});
+	 it('should throw Error if extra property on instance check', function() {
+		 	var constraint = {stringProperty: {type: "string"}, numberProperty: {type: "number"}, booleanProperty: {type: "boolean"}};
+		 	var validator = new Validator(constraint,true);
+			var constructor = validator.bind(TestObject,null,"TestObject");
+			var instance = new constructor();
+			var result;
+			try {
+				instance.validate();
+			} catch(err) {
+				result = err;
+			}
+			expect(result).to.be.an.instanceOf(Error);
+		});
+	 it('should not throw Error if extra property ', function() {
+		 	var constraint = {stringProperty: {type: "string"}, numberProperty: {type: "number"}, booleanProperty: {type: "boolean"}};
+		 	var validator = new Validator(constraint);
+			var constructor = validator.bind(TestObject,null,"TestObject");
+			var instance = new constructor();
+			var result;
+			try {
+				instance.validate();
+			} catch(err) {
+				result = err;
+			}
+			expect(result).to.be.undefined;
+		});
   });
   
 });

@@ -49,7 +49,9 @@ Due to an unavoidable shortcoming in chrome-proxy, the unit test for testing the
 
 # Updates (reverse chronological order)
 
-2016-03-04-28 v0.0.26 Eliminated chrome-proxy since NodeJS v6.0 supports Proxy now. Also fixed errors uncovered as a result where set handlers were not returning true in Proxy.
+2016-05-28 v0.0.27 Added second argument to constructor to have validate call limit properties to those in the validate schema if set to true. Like most methods, modified code to ensure .validate method is not enumerable. 
+
+2016-04-28 v0.0.26 Eliminated chrome-proxy since NodeJS v6.0 supports Proxy now. Also fixed errors uncovered as a result where set handlers were not returning true in Proxy.
 
 2016-03-03-14 v0.0.25 internals complexity reduction and README update, no functional changes
 
